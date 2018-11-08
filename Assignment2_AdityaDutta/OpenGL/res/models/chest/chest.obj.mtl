@@ -1,0 +1,39 @@
+# File produced by Open Asset Import Library (http://www.assimp.sf.net)
+# (assimp v3.1.76522261)
+
+newmtl wire_177088027
+Kd 0.694118 0.345098 0.105882
+Ka 0.694118 0.345098 0.105882
+Ks 0.35 0.35 0.35
+Ke 0 0 0
+d 1
+Ns 128
+illum 2
+
+newmtl wire_135059008
+Kd 0.529412 0.231373 0.031373
+Ka 0.529412 0.231373 0.031373
+Ks 0.35 0.35 0.35
+Ke 0 0 0
+d 1
+Ns 128
+illum 2
+
+newmtl wire_000000000
+Kd 0 0 0
+Ka 0 0 0
+Ks 0.35 0.35 0.35
+Ke 0 0 0
+d 1
+Ns 128
+illum 2
+
+newmtl wire_086086086
+Kd 0.337255 0.337255 0.337255
+Ka 0.337255 0.337255 0.337255
+Ks 0.35 0.35 0.35
+Ke 0 0 0
+d 1
+Ns 128
+illum 2
+

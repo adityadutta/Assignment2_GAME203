@@ -1,0 +1,23 @@
+# File produced by Open Asset Import Library (http://www.assimp.sf.net)
+# (assimp v3.1.76522261)
+
+newmtl Trank_bark
+Kd 1 1 1
+Ka 1 1 1
+Ks 0 0 0
+Ke 0 0 0
+d 1
+Ns 64
+illum 2
+map_Kd textures/bark_0004.jpg
+
+newmtl DB2X2_L01
+Kd 1 1 1
+Ka 1 1 1
+Ks 0 0 0
+Ke 0 0 0
+d 1
+Ns 64
+illum 2
+map_Kd textures/DB2X2_L01.png
+
