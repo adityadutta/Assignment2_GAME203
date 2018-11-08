@@ -1,0 +1,10 @@
+﻿  DynamicScene.cpp
+c:\users\ferre\desktop\game 203\assignments\assignment 1 (clean)\sdl_project\dynamicscene.cpp(49): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\ferre\desktop\game 203\assignments\assignment 1 (clean)\sdl_project\dynamicscene.cpp(56): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\ferre\desktop\game 203\assignments\assignment 1 (clean)\sdl_project\dynamicscene.cpp(75): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\ferre\desktop\game 203\assignments\assignment 1 (clean)\sdl_project\dynamicscene.cpp(76): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\ferre\desktop\game 203\assignments\assignment 1 (clean)\sdl_project\dynamicscene.cpp(80): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\ferre\desktop\game 203\assignments\assignment 1 (clean)\sdl_project\dynamicscene.cpp(81): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+  GameManager.cpp
+  Generating Code...
+  SDL_Project.vcxproj -> C:\Users\ferre\Desktop\GAME 203\Assignments\Assignment 1 (Clean)\Debug\SDL_Project.exe

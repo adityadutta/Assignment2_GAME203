@@ -1,0 +1,2 @@
+healthbarRPG.bmp 8 6 0
+jetski.bmp 2 5 0
