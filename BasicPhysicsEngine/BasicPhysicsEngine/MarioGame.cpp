@@ -58,7 +58,7 @@ void MarioGame::OnDestroy() {
 
 void MarioGame::Update(const float time) {
 		elapsedTime += time;
-
+		anims->setTimer(time);
 		//check collision of player with balls
 		/*for (int i = 0; i < bodies.size(); i++) {
 			if (Collider::CollisionCheck(*player, *bodies[i])) {
@@ -96,6 +96,8 @@ void MarioGame::Update(const float time) {
 		
 		//update player
 		if (player) player->Update(time);
+
+
 }
 
 void MarioGame::Render() {
@@ -137,6 +139,7 @@ void MarioGame::HandleEvents(const SDL_Event &_event) {
 			player->ApplyForceToCentre(VECTOR3_LEFT * 2000);
 			break;
 		case SDLK_SPACE:
+			anims->setAnim(*player, States::JUMPING);
 			player->ApplyForceToCentre(VECTOR3_UP * 3000);
 			break;
 		default:

@@ -14,11 +14,10 @@ public:
 	Animation();
 	~Animation();
 	std::vector<char*> AnimationsImages;
-	inline void setAnim(gdBody& body, States bo) {
-		if (bo == States::WALKING) {
-			body.SetImage(AnimationsImages[0]);
-		}
-	}
+	void setAnim(gdBody& body, States bo);
+	void setTimer(const float timer);
+	float timeWalk;
+	float timeIdle;
 
 };
 #endif

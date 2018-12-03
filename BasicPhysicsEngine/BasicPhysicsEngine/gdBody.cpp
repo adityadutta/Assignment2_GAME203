@@ -51,6 +51,7 @@ void gdBody::SetImage(char* _imageName) {
 	}
 }
 
+
 double gdBody::getMass() {
 	return mass;
 }
