@@ -21,6 +21,7 @@ public:
 	void ApplyForceToCentre(const Vector3& force);   // update acceleration using a = F/m
 	SDL_Surface* getImage();
 	double getMass();
+	void SetImage(char* _imageName);
 
 };
 #endif //!GDBODY_H

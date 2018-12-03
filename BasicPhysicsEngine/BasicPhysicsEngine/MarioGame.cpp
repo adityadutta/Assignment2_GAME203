@@ -6,7 +6,7 @@
 #include <algorithm>  
 #include <ctime>    // For time()
 #include <cstdlib>  // For srand() and rand()
-
+#include"Animation.h"
 
 void MarioGame::clampVelocity()
 {
@@ -33,14 +33,14 @@ bool MarioGame::OnCreate() {
 	if (background == nullptr) {
 		return false;
 	}
-
+	anims = std::unique_ptr<Animation>(new Animation());
 	float aspectRatio = (float)w / (float)h;
 	projectionMatrix = MMath::viewportNDC(w, h) * MMath::orthographic(-30.0f, 30.0f, -30.0f * aspectRatio, 30.0f * aspectRatio, 0.0f, 1.0f);
 
 	IMG_Init(IMG_INIT_PNG);
 
 	//initializing the player
-	player = new gdBody("player.png", 10.0f, Vector3(0.0f, 10.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f));
+	player = new gdBody("MarioBigIdle.png", 10.0f, Vector3(0.0f, 10.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f));
 
 	return true;
 }
@@ -89,6 +89,8 @@ void MarioGame::Update(const float time) {
 			player->linearVelocity.x = -player->linearVelocity.x;
 		}
 
+	
+	
 		clampVelocity();
 		player->acceleration.y += -9.81f;
 		
@@ -128,6 +130,7 @@ void MarioGame::HandleEvents(const SDL_Event &_event) {
 		case SDLK_d:
 			//player->linearVelocity += VECTOR3_RIGHT * 100.0f * 0.016;
 			player->ApplyForceToCentre(VECTOR3_RIGHT * 2000);
+			anims->setAnim(*player, States::WALKING);
 			break;
 		case SDLK_a:
 			//player->linearVelocity += (VECTOR3_LEFT * 10.0f);

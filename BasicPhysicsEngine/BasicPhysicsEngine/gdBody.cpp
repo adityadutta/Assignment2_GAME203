@@ -44,6 +44,13 @@ SDL_Surface* gdBody::getImage() {
 	return bodyImage;
 }
 
+void gdBody::SetImage(char* _imageName) {
+	bodyImage = IMG_Load(_imageName);
+	if (bodyImage == nullptr) {
+		/// What should we do?
+	}
+}
+
 double gdBody::getMass() {
 	return mass;
 }

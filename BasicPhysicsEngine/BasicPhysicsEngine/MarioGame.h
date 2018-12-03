@@ -5,7 +5,8 @@
 #include"Vector3.h"
 #include "Scene.h"
 #include<vector>
-
+#include "Animation.h"
+#include <memory>
 #include <SDL.h>
 #include<SDL_image.h>
 
@@ -22,7 +23,7 @@ private:
 
 	float elapsedTime;
 	bool isRunning;
-
+	std::unique_ptr <Animation> anims;
 	SDL_Surface* background;
 
 	void clampVelocity();
