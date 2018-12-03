@@ -1,0 +1,9 @@
+﻿cl : Command line warning D9002: ignoring unknown option '/std:[c++17|c++latest]'
+  MarioGame.cpp
+c:\users\adity\desktop\humber\basicphysicsengine\basicphysicsengine\vector3.h(27): warning C4005: 'VECTOR3_BACK': macro redefinition
+  c:\users\adity\desktop\humber\basicphysicsengine\basicphysicsengine\vector3.h(21): note: see previous definition of 'VECTOR3_BACK'
+c:\users\adity\desktop\humber\basicphysicsengine\basicphysicsengine\mariogame.cpp(107): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\adity\desktop\humber\basicphysicsengine\basicphysicsengine\mariogame.cpp(108): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\adity\desktop\humber\basicphysicsengine\basicphysicsengine\mariogame.cpp(115): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\adity\desktop\humber\basicphysicsengine\basicphysicsengine\mariogame.cpp(116): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+  BasicPhysicsEngine.vcxproj -> C:\Users\adity\Desktop\HUMBER\BasicPhysicsEngine\Debug\BasicPhysicsEngine.exe
