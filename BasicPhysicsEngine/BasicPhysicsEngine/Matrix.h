@@ -1,7 +1,7 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 #include <stdio.h>	/// Needed for the printf statement, could have used cin and cout but I have issues.  
-#include "Vector3.h"
+#include "Vector.h"
 
 namespace  MATH {
 	/// These are the default vectors of the eye (camera) according to OpenGL and the right hand rule
@@ -134,12 +134,12 @@ namespace  MATH {
 			return Vec4(x,y,z,w);
 		}*/
 
-		inline  Vector3 operator* (const Vector3& v) const {
+		inline  Vec3 operator* (const Vec3& v) const {
 			 float x = v.x * m[0] + v.y * m[4] + v.z * m[8]  + 1.0f * m[12];
 			 float y = v.x * m[1] + v.y * m[5] + v.z * m[9]  + 1.0f * m[13];
 			 float z = v.x * m[2] + v.y * m[6] + v.z * m[10] + 1.0f * m[14];
 			 float w = v.x * m[3] + v.y * m[7] + v.z * m[11] + 1.0f * m[15];
-			 return Vector3(x, y, z);
+			 return Vec3(x, y, z);
 		}
 
 		inline void print() const { /// Print them in column form (right-hand rule)

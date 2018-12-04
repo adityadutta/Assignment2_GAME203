@@ -1,5 +1,5 @@
 #include "MarioGame.h"
-#include"gdBody.h"
+#include"Body.h"
 #include<iostream>
 #include"MMath.h"
 #include"Collider.h"
@@ -40,7 +40,10 @@ bool MarioGame::OnCreate() {
 	IMG_Init(IMG_INIT_PNG);
 
 	//initializing the player
-	player = new gdBody("player.png", 10.0f, Vector3(0.0f, 10.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 0.0f));
+	player = new Body("player.png", 10.0f, Vec3(0.0f, 10.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f));
+
+	//initializing the player
+	collector = new Body("Ground-Transparent-PNG.png", 100.0f, Vec3(-30.0f, -30.0f, 0.0f), Vec3(3.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f));
 
 	return true;
 }
@@ -52,6 +55,10 @@ void MarioGame::OnDestroy() {
 	if (player) {
 		delete player;
 		player = nullptr;
+	}
+	if (collector) {
+		delete collector;
+		collector = nullptr;
 	}
 
 }
@@ -81,9 +88,14 @@ void MarioGame::Update(const float time) {
 		/*if (player->position.y > 52.0f || player->position.y < -48.0f) {
 			player->linearVelocity.y = -player->linearVelocity.y;
 		}*/
-		if (player->position.y <= -40.0f) {
-			player->position.y = -40.0f;
+		if (Collider::checkCollision(playerRectangle, groundRect)) {
+			std::cout << "Ground Collided";
+			//Collider::HandleCollision(*player, *collector, 1.0f);
 		}
+
+		/*if (player->position.y <= -40.0f) {
+			player->position.y = -40.0f;
+		}*/
 		//check borders on the x axis for the player
 		if (player->position.x > 28.0f || player->position.x < -30.0f) {
 			player->linearVelocity.x = -player->linearVelocity.x;
@@ -93,12 +105,11 @@ void MarioGame::Update(const float time) {
 		player->acceleration.y += -9.81f;
 		
 		//update player
-		if (player) player->Update(time);
+		if (player) player->update(time);
 }
 
 void MarioGame::Render() {
-	SDL_Rect playerRectangle;
-	SDL_Rect backgroundRectangle;
+
 	SDL_Surface *screenSurface = SDL_GetWindowSurface(window);
 	SDL_FillRect(screenSurface, nullptr, SDL_MapRGB(screenSurface->format, 0x00, 0x00, 0x00));
 
@@ -108,13 +119,21 @@ void MarioGame::Render() {
 	backgroundRectangle.y = 0.0f; /// implicit type conversions BAD - probably causes a compiler warning
 	SDL_BlitSurface(background, nullptr, screenSurface, &backgroundRectangle);
 
-	Vector3 playerCoords = projectionMatrix * player->position;
+	Vec3 playerCoords = projectionMatrix * player->position;
 
 	playerRectangle.h = player->getImage()->h;
 	playerRectangle.w = player->getImage()->w;
 	playerRectangle.x = playerCoords.x; /// implicit type conversions BAD - probably causes a compiler warning
 	playerRectangle.y = playerCoords.y; /// implicit type conversions BAD - probably causes a compiler warning
 	SDL_BlitSurface(player->getImage(), nullptr, screenSurface, &playerRectangle);
+
+	Vec3 collectorCoords = projectionMatrix * collector->position;
+
+	groundRect.h = collector->getImage()->h;
+	groundRect.w = collector->getImage()->w;
+	groundRect.x = collectorCoords.x; /// implicit type conversions BAD - probably causes a compiler warning
+	groundRect.y = collectorCoords.y; /// implicit type conversions BAD - probably causes a compiler warning
+	SDL_BlitSurface(collector->getImage() , nullptr, screenSurface, &groundRect);
 
 	SDL_UpdateWindowSurface(window);
 }
@@ -142,7 +161,7 @@ void MarioGame::HandleEvents(const SDL_Event &_event) {
 	}
 }
 
-void MarioGame::AddBody(gdBody* body)
+void MarioGame::AddBody(Body* body)
 {
 	bodies.push_back(body);
 }

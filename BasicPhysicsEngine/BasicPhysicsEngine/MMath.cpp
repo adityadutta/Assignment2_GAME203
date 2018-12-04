@@ -1,4 +1,4 @@
-#include "Vector3.h"
+#include "Vector.h"
 #include "MMath.h"
 using namespace MATH;
 
@@ -7,7 +7,7 @@ using namespace MATH;
 
  Matrix4 MMath::rotate(float degrees_, float x_, float y_, float z_){
 	float cosang, sinang, cosm;
-	Vector3 rotAxis(x_,y_,z_);
+	Vec3 rotAxis(x_,y_,z_);
 	rotAxis = rotAxis.Normalize();
 	degrees_ *= DEGREES_TO_RADIANS;
 	cosang = cos(degrees_);
@@ -35,7 +35,7 @@ using namespace MATH;
 	return m;
 }
 
-Matrix4 MMath::rotate(const float degrees_, const Vector3 &axis_) {
+Matrix4 MMath::rotate(const float degrees_, const Vec3 &axis_) {
 	 return MMath::rotate(degrees_, axis_.x, axis_.y, axis_.z);
 }
 
@@ -150,7 +150,7 @@ Matrix4 MMath::translate(float x_, float y_, float z_){
 				  0.0f, 0.0f, 1.0f, 0.0f,
 				  x_,    y_,    z_,	1.0f);  
 }
-Matrix4 MMath::translate(const Vector3 &translate_) {
+Matrix4 MMath::translate(const Vec3 &translate_) {
 	return MMath::translate(translate_.x, translate_.y, translate_.z);
 }
 
@@ -160,7 +160,7 @@ Matrix4 MMath::scale(float x_, float y_, float z_){
 				  0.0f, 0.0f, z_,   0.0f,
 				  0.0f, 0.0f, 0.0f,	1.0f); 
 }
-Matrix4 MMath::scale(const Vector3 &scale) {
+Matrix4 MMath::scale(const Vec3 &scale) {
 	return MMath::scale(scale.x, scale.y, scale.z);
 }
 
@@ -169,15 +169,15 @@ Matrix4 MMath::lookAt(float eyeX, float eyeY, float eyeZ,
 			float atX, float atY, float atZ,
 			float upX, float upY, float upZ){
 
-	Vector3 at(atX,atY,atZ);
-	Vector3 up(upX,upY,upZ);
-	Vector3 eye(eyeX,eyeY,eyeZ);
+	Vec3 at(atX,atY,atZ);
+	Vec3 up(upX,upY,upZ);
+	Vec3 eye(eyeX,eyeY,eyeZ);
 
 	Matrix4 result;
 
-	Vector3 forward = (at - eye).Normalize();
+	Vec3 forward = (at - eye).Normalize();
 	up = up.Normalize();
-	Vector3 side = (forward.Cross(up)).Normalize();
+	Vec3 side = (forward.Cross(up)).Normalize();
 	up = side.Cross(forward);
 
 	result[0] = side.x;
@@ -203,7 +203,7 @@ Matrix4 MMath::lookAt(float eyeX, float eyeY, float eyeZ,
 	return result;
 }
 
-Matrix4 MMath::lookAt(const Vector3& eye, const Vector3& at,  const Vector3& up){
+Matrix4 MMath::lookAt(const Vec3& eye, const Vec3& at,  const Vec3& up){
 	return lookAt(eye.x, eye.y, eye.z, at.x, at.y, at.z, up.x, up.y, up.z);
 }
 

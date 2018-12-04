@@ -120,28 +120,24 @@
   <ItemGroup>
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="GameManager.cpp" />
-    <ClCompile Include="gdBody.cpp" />
+    <ClCompile Include="Body.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MarioGame.cpp" />
     <ClCompile Include="MMath.cpp" />
-    <ClCompile Include="Scene00.cpp" />
-    <ClCompile Include="Scene02.cpp" />
     <ClCompile Include="Timer.cpp" />
-    <ClCompile Include="Vector3.cpp" />
+    <ClCompile Include="Vector.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collider.h" />
     <ClInclude Include="GameManager.h" />
-    <ClInclude Include="gdBody.h" />
+    <ClInclude Include="Body.h" />
     <ClInclude Include="MarioGame.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="MMath.h" />
     <ClInclude Include="Scene.h" />
-    <ClInclude Include="Scene00.h" />
-    <ClInclude Include="Scene02.h" />
     <ClInclude Include="Timer.h" />
-    <ClInclude Include="Vector3.h" />
+    <ClInclude Include="Vector.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

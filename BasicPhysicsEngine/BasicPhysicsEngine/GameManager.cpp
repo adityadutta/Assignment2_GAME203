@@ -1,8 +1,6 @@
 #include "GameManager.h"
 #include "Window.h"
 #include "Timer.h"
-#include "Scene02.h"
-#include "Scene00.h"
 #include"MarioGame.h"
 #include <iostream>
 
@@ -33,7 +31,7 @@ bool GameManager::OnCreate() {
 		return false;
 	}
 
-	currentScene = new Scene00(ptr->GetSDL_Window());
+	currentScene = new MarioGame(ptr->GetSDL_Window());
 	if (currentScene == nullptr) {
 		OnDestroy();
 		return false;
@@ -65,19 +63,6 @@ void GameManager::Run() {
 				case SDLK_ESCAPE:
 					isRunning = false;
 					break;
-				case SDLK_RETURN:
-					currentScene->OnDestroy();
-					delete currentScene;
-					currentScene = nullptr;
-					currentScene = new Scene02(ptr->GetSDL_Window());
-					if (currentScene == nullptr) {
-						OnDestroy();
-					}
-
-					if (currentScene->OnCreate() == false) {
-						OnDestroy();
-					}
-					break;
 				case SDLK_m:
 					currentScene->OnDestroy();
 					delete currentScene;
@@ -86,7 +71,6 @@ void GameManager::Run() {
 					if (currentScene == nullptr) {
 						OnDestroy();
 					}
-
 					if (currentScene->OnCreate() == false) {
 						OnDestroy();
 					}

@@ -1,15 +1,16 @@
 #ifndef COLLIDER_H
 #define COLLIDER_H
-#include"Vector3.h"
-#include"gdBody.h"
+#include"Vector.h"
+#include"Body.h"
 class Collider
 {
 public:
 	Collider();
 	~Collider();
-	static bool CollisionCheck(const gdBody &body1, const gdBody &body2);
-	static bool CollisionCheck(const gdBody &body1, const gdBody &body2, float _radius);
-	static void HandleCollision(gdBody &body1, gdBody &body2, float _cor);
-	static void HandleMovingCollision(gdBody &body1, gdBody &body2, float _cor);
+	static bool CollisionCheck(const Body &body1, const Body &body2);
+	static bool CollisionCheck(const Body &body1, const Body &body2, float _radius);
+	static bool checkCollision(SDL_Rect a, SDL_Rect b);
+	static void HandleCollision(Body &body1, Body &body2, float _cor);
+	static void HandleMovingCollision(Body &body1, Body &body2, float _cor);
 };
 #endif // !COLLIDER_H

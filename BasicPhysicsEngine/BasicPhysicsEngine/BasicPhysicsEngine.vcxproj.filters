@@ -18,16 +18,7 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gdBody.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Vector3.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Window.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene02.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameManager.cpp">
@@ -42,27 +33,21 @@
     <ClCompile Include="Collider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Scene00.cpp">
+    <ClCompile Include="MarioGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MarioGame.cpp">
+    <ClCompile Include="Body.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="gdBody.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene02.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameManager.h">
@@ -80,10 +65,13 @@
     <ClInclude Include="Collider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Scene00.h">
+    <ClInclude Include="MarioGame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MarioGame.h">
+    <ClInclude Include="Body.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
