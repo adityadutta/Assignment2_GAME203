@@ -19,6 +19,7 @@ private:
 	Body* player;
 	Body* collector;
 	std::vector<Body*> bodies;
+	SDL_Renderer *renderer;
 
 	float elapsedTime;
 	bool isRunning;

@@ -29,6 +29,7 @@ Body::Body(char* _imageName, double _mass, Vec3 _position, Vec3 _linearVelocity,
 	if (bodyImage == nullptr) {
 		/// What should we do?
 	}
+
 }
 void Body::update(double timeStep)
 {
@@ -45,6 +46,8 @@ void Body::update(double timeStep)
 	//linearVelocity = linearVelocity(init) + acceleration * time;
 	linearVelocity += acceleration * timeStep;
 
+	collider.x = position.x;
+	collider.y = position.y;
 
 	acceleration.SetZero();
 }
@@ -93,6 +96,19 @@ Vec3 Body::getFarthestPointInDirection(const Vec3 & d)
 void Body::addVertex(const Vec3 _vertex)
 {
 	vertices.push_back(_vertex);
+}
+
+void Body::addCollider(float _width, float _height)
+{
+	collider.h = _height;
+	collider.w = _width;
+	collider.x = position.x;
+	collider.y = position.y;
+}
+
+void Body::shiftColliders()
+{
+	
 }
 
 SDL_Surface* Body::getImage() {

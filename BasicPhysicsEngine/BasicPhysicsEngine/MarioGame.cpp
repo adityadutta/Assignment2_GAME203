@@ -7,6 +7,7 @@
 #include <ctime>    // For time()
 #include <cstdlib>  // For srand() and rand()
 
+using namespace A3Engine;
 
 void MarioGame::clampVelocity()
 {
@@ -28,7 +29,7 @@ MarioGame::MarioGame(SDL_Window* sdlWindow_) {
 bool MarioGame::OnCreate() {
 	int w, h;
 	SDL_GetWindowSize(window, &w, &h);
-
+	renderer = SDL_CreateRenderer(window, -1, 0);
 	background = IMG_Load("background.png");
 	if (background == nullptr) {
 		return false;
@@ -40,11 +41,12 @@ bool MarioGame::OnCreate() {
 	IMG_Init(IMG_INIT_PNG);
 
 	//initializing the player
-	player = new Body("player.png", 10.0f, Vec3(0.0f, 10.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f));
+	player = new Body("MarioSmallIdle.png", 10.0f, Vec3(0.0f, -15.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f));
+	player->addCollider(10.0f, 15.0f);
 
 	//initializing the player
-	collector = new Body("Ground-Transparent-PNG.png", 100.0f, Vec3(-30.0f, -30.0f, 0.0f), Vec3(3.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f));
-
+	collector = new Body("MarioLevel.png", 100.0f, Vec3(-20.0f, -30.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f));
+	collector->addCollider(300.0f, 12.0f);
 	return true;
 }
 
@@ -60,58 +62,42 @@ void MarioGame::OnDestroy() {
 		delete collector;
 		collector = nullptr;
 	}
-
+	SDL_DestroyRenderer(renderer);
 }
 
+bool isGrounded = false;
 void MarioGame::Update(const float time) {
-		elapsedTime += time;
+	elapsedTime += time;
 
-		//check collision of player with balls
-		/*for (int i = 0; i < bodies.size(); i++) {
-			if (Collider::CollisionCheck(*player, *bodies[i])) {
-				Collider::HandleCollision(*player, *bodies[i], 1.0f);
-				auto it = std::find(bodies.begin(), bodies.end(), bodies[i]);
-				if (it != bodies.end()) {
-					bodies.erase(it);
-				}
-			}
-		}*/
+	if (Collider::checkCollision(player->collider, collector->collider)) {
+		isGrounded = true;
+		player->position.y += 1.0f;
+	}
+	else {
+		isGrounded = false;
 
-		//check collision with player and the collector
-		/*if (Collider::CollisionCheck(*player, *collector, 12.0f)) {
-			player->position.Set(0.0f, 50.0f, 0.0f);
-			player->linearVelocity.SetZero();
-			isRunning = false;
-		}*/
+	}
 
-		//check borders on the y axis for the player
-		/*if (player->position.y > 52.0f || player->position.y < -48.0f) {
-			player->linearVelocity.y = -player->linearVelocity.y;
-		}*/
-		if (Collider::checkCollision(playerRectangle, groundRect)) {
-			std::cout << "Ground Collided";
-			//Collider::HandleCollision(*player, *collector, 1.0f);
-		}
-
-		/*if (player->position.y <= -40.0f) {
-			player->position.y = -40.0f;
-		}*/
-		//check borders on the x axis for the player
-		if (player->position.x > 28.0f || player->position.x < -30.0f) {
-			player->linearVelocity.x = -player->linearVelocity.x;
-		}
-
-		clampVelocity();
+	if (!isGrounded) {
 		player->acceleration.y += -9.81f;
-		
-		//update player
-		if (player) player->update(time);
+	}
+
+	//check borders on the x axis for the player
+	if (player->position.x > 28.0f || player->position.x < -30.0f) {
+		player->linearVelocity.x = -player->linearVelocity.x;
+	}
+
+	clampVelocity();
+
+	//update player
+	if (player) player->update(time);
 }
 
 void MarioGame::Render() {
 
 	SDL_Surface *screenSurface = SDL_GetWindowSurface(window);
 	SDL_FillRect(screenSurface, nullptr, SDL_MapRGB(screenSurface->format, 0x00, 0x00, 0x00));
+
 
 	backgroundRectangle.h = background->h;
 	backgroundRectangle.w = background->w;
@@ -133,7 +119,7 @@ void MarioGame::Render() {
 	groundRect.w = collector->getImage()->w;
 	groundRect.x = collectorCoords.x; /// implicit type conversions BAD - probably causes a compiler warning
 	groundRect.y = collectorCoords.y; /// implicit type conversions BAD - probably causes a compiler warning
-	SDL_BlitSurface(collector->getImage() , nullptr, screenSurface, &groundRect);
+	SDL_BlitSurface(collector->getImage(), nullptr, screenSurface, &groundRect);
 
 	SDL_UpdateWindowSurface(window);
 }
@@ -153,7 +139,9 @@ void MarioGame::HandleEvents(const SDL_Event &_event) {
 			player->ApplyForceToCentre(VECTOR3_LEFT * 2000);
 			break;
 		case SDLK_SPACE:
-			player->ApplyForceToCentre(VECTOR3_UP * 3000);
+			if (isGrounded) {
+				player->ApplyForceToCentre(VECTOR3_UP * 8000);
+			}
 			break;
 		default:
 			break;
