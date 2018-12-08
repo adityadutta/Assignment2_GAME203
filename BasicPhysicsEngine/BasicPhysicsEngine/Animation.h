@@ -14,7 +14,10 @@ public:
 	Animation();
 	~Animation();
 	std::vector<char*> AnimationsImages;
+	std::vector<char*> AnimationsImagesFliped; 
+
 	void setAnim(Body& body, States bo);
+	void setAnimFliped(Body& body, States bo);
 	float frame;
 };
 #endif

@@ -9,6 +9,7 @@
 #include <SDL.h>
 #include<SDL_image.h>
 #include <memory>
+#include "InputManager.h"
 
 class Body;
 using namespace MATH;
@@ -36,8 +37,8 @@ private:
 	void ScrollCamera();
 	SDL_Rect cameraRect;
 	float cameraScrollSpeed;
-	std::unique_ptr <Animation> anims;
-
+	std::shared_ptr<Animation> anims;
+	std::unique_ptr <InputManager> HandleControls;
 public:
 	MarioGame(SDL_Window* sdlWindow);
 	bool OnCreate();

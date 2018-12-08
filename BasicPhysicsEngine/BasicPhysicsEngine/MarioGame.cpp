@@ -39,7 +39,9 @@ bool MarioGame::OnCreate() {
 	 cameraRect = { 0, 0, w, h};
 	 cameraScrollSpeed = 20.0f;
 
-	anims = std::unique_ptr<Animation>(new Animation());
+	
+	HandleControls = std::unique_ptr<InputManager>(new InputManager());
+	anims = std::shared_ptr<Animation>(new Animation());
 	float aspectRatio = (float)w / (float)h;
 	projectionMatrix = MMath::viewportNDC(w, h) * MMath::orthographic(-30.0f, 30.0f, -30.0f * aspectRatio, 30.0f * aspectRatio, 0.0f, 1.0f);
 
@@ -53,7 +55,6 @@ bool MarioGame::OnCreate() {
 	collector = new Body("MarioLevel.png", 100.0f, Vec3(-20.0f, -30.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f));
 	collector->addCollider(300.0f, 12.0f);
 	return true;
-
 
 }
 
@@ -142,33 +143,38 @@ void MarioGame::Render() {
 }
 
 void MarioGame::HandleEvents(const SDL_Event &_event) {
+	
 
-	if (_event.type == SDL_KEYDOWN)
-	{
-		switch (_event.key.keysym.sym)
-		{
-		case SDLK_d:
-			//player->linearVelocity += VECTOR3_RIGHT * 100.0f * 0.016;
-			player->ApplyForceToCentre(VECTOR3_RIGHT * 2000);			
-			if (isGrounded) {
-				anims->setAnim(*player, States::WALKING);
-			}
-			break;
-		case SDLK_a:
-			//player->linearVelocity += (VECTOR3_LEFT * 10.0f);
-			player->ApplyForceToCentre(VECTOR3_LEFT * 2000);
-			break;
-		case SDLK_SPACE:
-			if (isGrounded) {
-				player->ApplyForceToCentre(VECTOR3_UP * 8000);
-				anims->setAnim(*player, States::JUMPING);
-			}
-			break;
-		default:
-			break;
-		}
-	}
+	HandleControls->HandleEvents(_event, player, isGrounded, anims);
+
+	//if (_event.type == SDL_KEYDOWN)
+	//{
+	//	switch (_event.key.keysym.sym)
+	//	{
+	//	case SDLK_d:
+	//		//player->linearVelocity += VECTOR3_RIGHT * 100.0f * 0.016;
+	//		player->ApplyForceToCentre(VECTOR3_RIGHT * 2000);	
+	//		if (isGrounded) {
+	//			anims->setAnim(*player, States::WALKING);
+	//		}
+	//		break;
+	//	case SDLK_a:
+	//		//player->linearVelocity += (VECTOR3_LEFT * 10.0f);
+	//		player->ApplyForceToCentre(VECTOR3_LEFT * 2000);
+	//		break;
+	//	case SDLK_SPACE:
+	//		if (isGrounded) {
+	//			player->ApplyForceToCentre(VECTOR3_UP * 8000);
+	//			anims->setAnim(*player, States::JUMPING);
+	//		}
+	//		break;
+	//	default:
+	//		break;
+	//	}
+	//}
 }
+
+
 
 void MarioGame::AddBody(Body* body)
 {
