@@ -27,11 +27,11 @@ public:
 	Vec3 position;								//variable to hold the value of position
 	Vec3 linearVelocity;							//variable to hold the value of velocity
 	Vec3 acceleration;							//variable to hold the value of acceleration
-
+	
 	float angle;
 	Vec3 angularVelocity;						//variable to hold the value of angular velocity
 	Vec3 angularAcceleration;					//variable to hold the value of angular acceleration
-
+	void SetImage(char* _imageName);
 
 	std::vector<Vec3> vertices;
 

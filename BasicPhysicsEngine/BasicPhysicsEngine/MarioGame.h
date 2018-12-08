@@ -5,9 +5,10 @@
 #include"Vector.h"
 #include "Scene.h"
 #include<vector>
-
+#include "Animation.h"
 #include <SDL.h>
 #include<SDL_image.h>
+#include <memory>
 
 class Body;
 using namespace MATH;
@@ -31,6 +32,10 @@ private:
 	SDL_Rect groundRect;
 
 	void clampVelocity();
+
+	void ScrollCamera();
+	SDL_Rect cameraRect;
+	std::unique_ptr <Animation> anims;
 public:
 	MarioGame(SDL_Window* sdlWindow);
 	bool OnCreate();

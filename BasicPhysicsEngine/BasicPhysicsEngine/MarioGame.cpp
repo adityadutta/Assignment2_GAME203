@@ -27,6 +27,7 @@ MarioGame::MarioGame(SDL_Window* sdlWindow_) {
 }
 
 bool MarioGame::OnCreate() {
+
 	int w, h;
 	SDL_GetWindowSize(window, &w, &h);
 	renderer = SDL_CreateRenderer(window, -1, 0);
@@ -35,19 +36,24 @@ bool MarioGame::OnCreate() {
 		return false;
 	}
 
+	 cameraRect = { 0, 0, w, h};
+
+	anims = std::unique_ptr<Animation>(new Animation());
 	float aspectRatio = (float)w / (float)h;
 	projectionMatrix = MMath::viewportNDC(w, h) * MMath::orthographic(-30.0f, 30.0f, -30.0f * aspectRatio, 30.0f * aspectRatio, 0.0f, 1.0f);
 
 	IMG_Init(IMG_INIT_PNG);
 
 	//initializing the player
-	player = new Body("MarioSmallIdle.png", 10.0f, Vec3(0.0f, -15.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f));
+	player = new Body("MarioBigIdle.png", 10.0f, Vec3(0.0f, -15.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f));
 	player->addCollider(10.0f, 15.0f);
 
 	//initializing the player
 	collector = new Body("MarioLevel.png", 100.0f, Vec3(-20.0f, -30.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f));
 	collector->addCollider(300.0f, 12.0f);
 	return true;
+
+
 }
 
 void MarioGame::OnDestroy() {
@@ -66,7 +72,9 @@ void MarioGame::OnDestroy() {
 }
 
 bool isGrounded = false;
+
 void MarioGame::Update(const float time) {
+
 	elapsedTime += time;
 
 	if (Collider::checkCollision(player->collider, collector->collider)) {
@@ -75,7 +83,6 @@ void MarioGame::Update(const float time) {
 	}
 	else {
 		isGrounded = false;
-
 	}
 
 	if (!isGrounded) {
@@ -89,10 +96,16 @@ void MarioGame::Update(const float time) {
 
 	clampVelocity();
 
+	cameraRect.x = player->position.x;
+
 	//update player
 	if (player) player->update(time);
 }
 
+
+void MarioGame::ScrollCamera() {
+
+}
 void MarioGame::Render() {
 
 	SDL_Surface *screenSurface = SDL_GetWindowSurface(window);
@@ -115,11 +128,14 @@ void MarioGame::Render() {
 
 	Vec3 collectorCoords = projectionMatrix * collector->position;
 
+
 	groundRect.h = collector->getImage()->h;
 	groundRect.w = collector->getImage()->w;
 	groundRect.x = collectorCoords.x; /// implicit type conversions BAD - probably causes a compiler warning
 	groundRect.y = collectorCoords.y; /// implicit type conversions BAD - probably causes a compiler warning
-	SDL_BlitSurface(collector->getImage(), nullptr, screenSurface, &groundRect);
+
+
+	SDL_BlitSurface(collector->getImage(), &cameraRect, screenSurface, &groundRect);
 
 	SDL_UpdateWindowSurface(window);
 }
@@ -132,7 +148,10 @@ void MarioGame::HandleEvents(const SDL_Event &_event) {
 		{
 		case SDLK_d:
 			//player->linearVelocity += VECTOR3_RIGHT * 100.0f * 0.016;
-			player->ApplyForceToCentre(VECTOR3_RIGHT * 2000);
+			player->ApplyForceToCentre(VECTOR3_RIGHT * 2000);			
+			if (isGrounded) {
+				anims->setAnim(*player, States::WALKING);
+			}
 			break;
 		case SDLK_a:
 			//player->linearVelocity += (VECTOR3_LEFT * 10.0f);
@@ -141,6 +160,7 @@ void MarioGame::HandleEvents(const SDL_Event &_event) {
 		case SDLK_SPACE:
 			if (isGrounded) {
 				player->ApplyForceToCentre(VECTOR3_UP * 8000);
+				anims->setAnim(*player, States::JUMPING);
 			}
 			break;
 		default:

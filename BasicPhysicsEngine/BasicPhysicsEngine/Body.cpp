@@ -115,6 +115,13 @@ SDL_Surface* Body::getImage() {
 	return bodyImage;
 }
 
+void Body::SetImage(char* _imageName) {
+	bodyImage = IMG_Load(_imageName);
+	if (bodyImage == nullptr) {
+		/// What should we do?
+	}
+}
+
 double Body::getMass() {
 	return mass;
 }
