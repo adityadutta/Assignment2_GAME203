@@ -37,6 +37,7 @@ bool MarioGame::OnCreate() {
 	}
 
 	 cameraRect = { 0, 0, w, h};
+	 cameraScrollSpeed = 20.0f;
 
 	anims = std::unique_ptr<Animation>(new Animation());
 	float aspectRatio = (float)w / (float)h;
@@ -89,14 +90,14 @@ void MarioGame::Update(const float time) {
 		player->acceleration.y += -9.81f;
 	}
 
-	//check borders on the x axis for the player
-	if (player->position.x > 28.0f || player->position.x < -30.0f) {
-		player->linearVelocity.x = -player->linearVelocity.x;
-	}
+	////check borders on the x axis for the player
+	//if (player->position.x > 28.0f || player->position.x < -30.0f) {
+	//	player->linearVelocity.x = -player->linearVelocity.x;
+	//}
 
 	clampVelocity();
 
-	cameraRect.x = player->position.x;
+	cameraRect.x = player->position.x * cameraScrollSpeed; // multiplying by camera scroll speed.
 
 	//update player
 	if (player) player->update(time);

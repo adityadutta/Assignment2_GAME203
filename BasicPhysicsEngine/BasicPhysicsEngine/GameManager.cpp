@@ -14,8 +14,8 @@ GameManager::GameManager() {
 /// In this OnCreate() method, fuction, subroutine, whatever the word, 
 bool GameManager::OnCreate() {
 
-	const int SCREEN_WIDTH = 1280;
-	const int SCREEN_HEIGHT = 720;
+	const int SCREEN_WIDTH = 640;
+	const int SCREEN_HEIGHT = 480;
 	ptr = new Window(SCREEN_WIDTH, SCREEN_HEIGHT);
 	if (ptr == nullptr) {
 		OnDestroy();

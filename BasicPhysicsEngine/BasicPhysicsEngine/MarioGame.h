@@ -35,7 +35,9 @@ private:
 
 	void ScrollCamera();
 	SDL_Rect cameraRect;
+	float cameraScrollSpeed;
 	std::unique_ptr <Animation> anims;
+
 public:
 	MarioGame(SDL_Window* sdlWindow);
 	bool OnCreate();

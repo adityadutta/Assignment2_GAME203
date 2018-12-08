@@ -1,5 +1,13 @@
 ﻿cl : Command line warning D9002: ignoring unknown option '/std:[c++17|c++latest]'
-  Animation.cpp
-d:\humber\semester 3\game 203_ game programing 5\assignment2_game203\basicphysicsengine\basicphysicsengine\animation.cpp(17): warning C4244: 'argument': conversion from 'float' to 'const unsigned int', possible loss of data
-  BasicPhysicsEngine.vcxproj -> D:\Humber\Semester 3\Game 203_ Game Programing 5\Assignment2_GAME203\BasicPhysicsEngine\Debug\BasicPhysicsEngine.exe
-  BasicPhysicsEngine.vcxproj -> D:\Humber\Semester 3\Game 203_ Game Programing 5\Assignment2_GAME203\BasicPhysicsEngine\Debug\BasicPhysicsEngine.pdb (Partial PDB)
+  MarioGame.cpp
+c:\users\adity\desktop\humber\_humber fall 2018\game programming 5 - game-203-0na\assignment2_game203\basicphysicsengine\basicphysicsengine\collider.h(38): warning C4018: '<': signed/unsigned mismatch
+c:\users\adity\desktop\humber\_humber fall 2018\game programming 5 - game-203-0na\assignment2_game203\basicphysicsengine\basicphysicsengine\collider.h(42): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+c:\users\adity\desktop\humber\_humber fall 2018\game programming 5 - game-203-0na\assignment2_game203\basicphysicsengine\basicphysicsengine\collider.h(62): warning C4018: '<': signed/unsigned mismatch
+c:\users\adity\desktop\humber\_humber fall 2018\game programming 5 - game-203-0na\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(99): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\adity\desktop\humber\_humber fall 2018\game programming 5 - game-203-0na\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(117): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\adity\desktop\humber\_humber fall 2018\game programming 5 - game-203-0na\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(118): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\adity\desktop\humber\_humber fall 2018\game programming 5 - game-203-0na\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(125): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\adity\desktop\humber\_humber fall 2018\game programming 5 - game-203-0na\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(126): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\adity\desktop\humber\_humber fall 2018\game programming 5 - game-203-0na\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(134): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\adity\desktop\humber\_humber fall 2018\game programming 5 - game-203-0na\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(135): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+  BasicPhysicsEngine.vcxproj -> C:\Users\adity\Desktop\HUMBER\_Humber Fall 2018\Game Programming 5 - GAME-203-0NA\Assignment2_GAME203\BasicPhysicsEngine\Debug\BasicPhysicsEngine.exe
