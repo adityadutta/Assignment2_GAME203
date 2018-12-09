@@ -19,8 +19,8 @@ private:
 	Matrix4 projectionMatrix;
 
 	Body* player;
-	Body* collector;
-	std::vector<Body*> bodies;
+	Body* ground;
+	std::vector<Body*> coins;
 	SDL_Renderer *renderer;
 
 	float elapsedTime;
@@ -31,14 +31,20 @@ private:
 	SDL_Rect playerRectangle;
 	SDL_Rect backgroundRectangle;
 	SDL_Rect groundRect;
+	SDL_Rect coinRect;
 
-	void clampVelocity();
-
-	void ScrollCamera();
 	SDL_Rect cameraRect;
 	float cameraScrollSpeed;
+
+
 	std::shared_ptr<Animation> anims;
 	std::unique_ptr <InputManager> HandleControls;
+	std::unique_ptr<UIManager> manager; //object UIManager 
+
+	//player stuff
+	bool isGrounded = false;
+	int playerCoins;
+
 public:
 	MarioGame(SDL_Window* sdlWindow);
 	bool OnCreate();

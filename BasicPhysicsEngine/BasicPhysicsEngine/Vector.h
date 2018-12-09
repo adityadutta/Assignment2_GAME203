@@ -31,7 +31,6 @@ namespace MATH {
 
 
 #pragma endregion
-
 	struct Vec3
 	{
 		float x, y, z;
@@ -257,6 +256,17 @@ namespace MATH {
 			return stringStream.str();
 		}
 	};
+
+	//HELPER FUNCTIONS
+	static inline float clamp(float _value, float _min, float _max)
+	{
+		if (_value > _max)
+			_value = _max;
+		if (_value < _min)
+			_value = _min;
+
+		return _value;
+	}
 }
 #endif //!VECTOR_H
 

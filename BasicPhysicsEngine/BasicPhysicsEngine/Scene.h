@@ -2,6 +2,7 @@
 #define SCENE_H
 #include<SDL.h>
 
+class UIManager;
 class Scene {
 public:
 	virtual bool OnCreate() = 0;

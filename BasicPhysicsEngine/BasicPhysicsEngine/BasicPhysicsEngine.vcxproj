@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{D43B9B2E-E956-48CC-9F36-5B243EC67A83}</ProjectGuid>
     <RootNamespace>BasicPhysicsEngine</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -69,7 +69,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\GameDev\SDL2_image-2.0.3\include;C:\GameDev\SDL2-2.0.8\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\GameDev\SDL2_image-2.0.3\include;C:\GameDev\SDL2-2.0.8\include;C:\GameDev\SDL2_ttf-devel-2.0.14-VC\SDL2_ttf-2.0.14\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -80,7 +80,7 @@
  %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>C:\GameDev\SDL2-2.0.8\lib\x86\SDL2.lib;C:\GameDev\SDL2-2.0.8\lib\x86\SDL2main.lib;C:\GameDev\SDL2_image-2.0.3\lib\x86\SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>C:\GameDev\SDL2-2.0.8\lib\x86\SDL2.lib;C:\GameDev\SDL2-2.0.8\lib\x86\SDL2main.lib;C:\GameDev\SDL2_image-2.0.3\lib\x86\SDL2_image.lib;C:\GameDev\SDL2_ttf-devel-2.0.14-VC\SDL2_ttf-2.0.14\lib\x86\SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -127,6 +127,11 @@
     <ClCompile Include="MarioGame.cpp" />
     <ClCompile Include="MMath.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="UI01.cpp" />
+    <ClCompile Include="UIElement.cpp" />
+    <ClCompile Include="UIFactory.cpp" />
+    <ClCompile Include="UILabel.cpp" />
+    <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="Vector.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
@@ -141,6 +146,12 @@
     <ClInclude Include="MMath.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="UI.h" />
+    <ClInclude Include="UI01.h" />
+    <ClInclude Include="UIElement.h" />
+    <ClInclude Include="UIFactory.h" />
+    <ClInclude Include="UILabel.h" />
+    <ClInclude Include="UIManager.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>

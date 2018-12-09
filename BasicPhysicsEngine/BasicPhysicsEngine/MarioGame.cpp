@@ -1,23 +1,15 @@
-#include "MarioGame.h"
-#include"Body.h"
 #include<iostream>
-#include"MMath.h"
-#include"Collider.h"
 #include <algorithm>  
 #include <ctime>    // For time()
 #include <cstdlib>  // For srand() and rand()
 
-using namespace A3Engine;
+#include "MarioGame.h"
+#include"Body.h"
+#include"MMath.h"
+#include"Collider.h"
+#include"UIManager.h"
 
-void MarioGame::clampVelocity()
-{
-	float maxSpeed = 10.0f;
-	float lSpeed = -maxSpeed;
-	if (player->linearVelocity.x > maxSpeed)
-		player->linearVelocity.x = maxSpeed;
-	if (player->linearVelocity.x < lSpeed)
-		player->linearVelocity.x = lSpeed;
-}
+using namespace A3Engine;
 
 MarioGame::MarioGame(SDL_Window* sdlWindow_) {
 
@@ -36,12 +28,25 @@ bool MarioGame::OnCreate() {
 		return false;
 	}
 
-	 cameraRect = { 0, 0, w, h};
-	 cameraScrollSpeed = 20.0f;
+	cameraRect = { 0, 0, w, h };
+	cameraScrollSpeed = 20.0f;
 
-	
+
 	HandleControls = std::unique_ptr<InputManager>(new InputManager());
+
 	anims = std::shared_ptr<Animation>(new Animation());
+
+	manager = std::unique_ptr<UIManager>(new UIManager());
+	if (manager == nullptr) {
+		OnDestroy();
+		return false;
+	}
+
+	if (manager->onCreate() == false) {
+		OnDestroy();
+		return false;
+	}
+
 	float aspectRatio = (float)w / (float)h;
 	projectionMatrix = MMath::viewportNDC(w, h) * MMath::orthographic(-30.0f, 30.0f, -30.0f * aspectRatio, 30.0f * aspectRatio, 0.0f, 1.0f);
 
@@ -49,11 +54,29 @@ bool MarioGame::OnCreate() {
 
 	//initializing the player
 	player = new Body("MarioBigIdle.png", 10.0f, Vec3(0.0f, -15.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f));
-	player->addCollider(10.0f, 15.0f);
+	player->addCollider(3.0f, 6.0f);
 
 	//initializing the player
-	collector = new Body("MarioLevel.png", 100.0f, Vec3(-20.0f, -30.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f));
-	collector->addCollider(300.0f, 12.0f);
+	ground = new Body("MarioLevel.png", 100.0f, Vec3(-20.0f, -30.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f));
+	ground->addCollider(300.0f, 6.0f);
+
+	AddBody(new Body("Sprites/coin.png", 1.0f, Vec3(16.0f, -15.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f)));
+	AddBody(new Body("Sprites/coin.png", 1.0f, Vec3(10.0f, -24.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f)));
+	AddBody(new Body("Sprites/coin.png", 1.0f, Vec3(8.0f, -24.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f)));
+	AddBody(new Body("Sprites/coin.png", 1.0f, Vec3(12.0f, -24.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f)));
+
+	for (auto coin : coins) {
+		if (coin == nullptr) {
+			return false;
+		}
+		else {
+			coin->addCollider(0.16f, 0.16f);
+		}
+	}
+
+	//player stuff
+	playerCoins = 0;
+
 	return true;
 
 }
@@ -66,22 +89,29 @@ void MarioGame::OnDestroy() {
 		delete player;
 		player = nullptr;
 	}
-	if (collector) {
-		delete collector;
-		collector = nullptr;
+	if (ground) {
+		delete ground;
+		ground = nullptr;
 	}
+
+	for (auto coin : coins) {
+		if (coin) {
+			delete coin;
+			coin = nullptr;
+		}
+	}
+
 	SDL_DestroyRenderer(renderer);
 }
-
-bool isGrounded = false;
 
 void MarioGame::Update(const float time) {
 
 	elapsedTime += time;
+	manager->update(elapsedTime);
 
-	if (Collider::checkCollision(player->collider, collector->collider)) {
+	if (Collider::checkCollision(player->collider, ground->collider)) {
 		isGrounded = true;
-		player->position.y += 1.0f;
+		player->linearVelocity.y = 0.0f;
 	}
 	else {
 		isGrounded = false;
@@ -91,12 +121,21 @@ void MarioGame::Update(const float time) {
 		player->acceleration.y += -9.81f;
 	}
 
-	////check borders on the x axis for the player
-	//if (player->position.x > 28.0f || player->position.x < -30.0f) {
-	//	player->linearVelocity.x = -player->linearVelocity.x;
-	//}
+	//check collision of player with balls
+	for (int i = 0; i < coins.size(); i++) {
+		if (Collider::checkCollision(player->collider, coins[i]->collider)) {
+			++playerCoins;
+			std::cout<< playerCoins << "\n";
+			//Collider::HandleCollision(*player, *coins[i], 1.0f);
+			auto it = std::find(coins.begin(), coins.end(), coins[i]);
+			if (it != coins.end()) {
+				coins.erase(it);
+			}
+			manager->getCurrentUI()->SetCoins(playerCoins);
+		}
+	}
 
-	clampVelocity();
+	player->linearVelocity.x = MATH::clamp(player->linearVelocity.x, -10.0f, 10.0f);
 
 	cameraRect.x = player->position.x * cameraScrollSpeed; // multiplying by camera scroll speed.
 
@@ -104,15 +143,10 @@ void MarioGame::Update(const float time) {
 	if (player) player->update(time);
 }
 
-
-void MarioGame::ScrollCamera() {
-
-}
 void MarioGame::Render() {
 
 	SDL_Surface *screenSurface = SDL_GetWindowSurface(window);
 	SDL_FillRect(screenSurface, nullptr, SDL_MapRGB(screenSurface->format, 0x00, 0x00, 0x00));
-
 
 	backgroundRectangle.h = background->h;
 	backgroundRectangle.w = background->w;
@@ -128,55 +162,36 @@ void MarioGame::Render() {
 	playerRectangle.y = playerCoords.y; /// implicit type conversions BAD - probably causes a compiler warning
 	SDL_BlitSurface(player->getImage(), nullptr, screenSurface, &playerRectangle);
 
-	Vec3 collectorCoords = projectionMatrix * collector->position;
+	for (auto coin : coins) {
+		Vec3 screenCoords = projectionMatrix * coin->position;
 
+		coinRect.h = coin->getImage()->h;
+		coinRect.w = coin->getImage()->w;
+		coinRect.x = screenCoords.x; /// implicit type conversions BAD - probably causes a compiler warning
+		coinRect.y = screenCoords.y; /// implicit type conversions BAD - probably causes a compiler warning
+		SDL_BlitSurface(coin->getImage(), nullptr, screenSurface, &coinRect);
+	}
 
-	groundRect.h = collector->getImage()->h;
-	groundRect.w = collector->getImage()->w;
+	Vec3 collectorCoords = projectionMatrix * ground->position;
+	groundRect.h = ground->getImage()->h;
+	groundRect.w = ground->getImage()->w;
 	groundRect.x = collectorCoords.x; /// implicit type conversions BAD - probably causes a compiler warning
 	groundRect.y = collectorCoords.y; /// implicit type conversions BAD - probably causes a compiler warning
+	SDL_BlitSurface(ground->getImage(), &cameraRect, screenSurface, &groundRect);
 
-
-	SDL_BlitSurface(collector->getImage(), &cameraRect, screenSurface, &groundRect);
+	manager->render(projectionMatrix, screenSurface);
 
 	SDL_UpdateWindowSurface(window);
 }
 
 void MarioGame::HandleEvents(const SDL_Event &_event) {
-	
-
 	HandleControls->HandleEvents(_event, player, isGrounded, anims);
-
-	//if (_event.type == SDL_KEYDOWN)
-	//{
-	//	switch (_event.key.keysym.sym)
-	//	{
-	//	case SDLK_d:
-	//		//player->linearVelocity += VECTOR3_RIGHT * 100.0f * 0.016;
-	//		player->ApplyForceToCentre(VECTOR3_RIGHT * 2000);	
-	//		if (isGrounded) {
-	//			anims->setAnim(*player, States::WALKING);
-	//		}
-	//		break;
-	//	case SDLK_a:
-	//		//player->linearVelocity += (VECTOR3_LEFT * 10.0f);
-	//		player->ApplyForceToCentre(VECTOR3_LEFT * 2000);
-	//		break;
-	//	case SDLK_SPACE:
-	//		if (isGrounded) {
-	//			player->ApplyForceToCentre(VECTOR3_UP * 8000);
-	//			anims->setAnim(*player, States::JUMPING);
-	//		}
-	//		break;
-	//	default:
-	//		break;
-	//	}
-	//}
+	manager->handleEvents(_event);
 }
 
 
 
 void MarioGame::AddBody(Body* body)
 {
-	bodies.push_back(body);
+	coins.push_back(body);
 }
