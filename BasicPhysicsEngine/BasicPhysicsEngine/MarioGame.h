@@ -10,6 +10,10 @@
 #include<SDL_image.h>
 #include <memory>
 #include "InputManager.h"
+#include "json.hpp"
+#include <fstream>
+
+using json = nlohmann::json;
 
 class Body;
 using namespace MATH;
@@ -48,6 +52,7 @@ private:
 public:
 	MarioGame(SDL_Window* sdlWindow);
 	bool OnCreate();
+	void Load();
 	void OnDestroy();
 	void Update(const float time);
 	void Render();

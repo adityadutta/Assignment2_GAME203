@@ -141,6 +141,7 @@
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Body.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="json.hpp" />
     <ClInclude Include="MarioGame.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="MMath.h" />

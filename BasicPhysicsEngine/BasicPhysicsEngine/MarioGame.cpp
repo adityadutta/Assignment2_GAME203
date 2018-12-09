@@ -60,11 +60,14 @@ bool MarioGame::OnCreate() {
 	ground = new Body("MarioLevel.png", 100.0f, Vec3(-20.0f, -30.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f));
 	ground->addCollider(300.0f, 6.0f);
 
+	// Read from a file
+	MarioGame::Load();
+	
 	AddBody(new Body("Sprites/coin.png", 1.0f, Vec3(16.0f, -15.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f)));
 	AddBody(new Body("Sprites/coin.png", 1.0f, Vec3(10.0f, -24.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f)));
 	AddBody(new Body("Sprites/coin.png", 1.0f, Vec3(8.0f, -24.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f)));
 	AddBody(new Body("Sprites/coin.png", 1.0f, Vec3(12.0f, -24.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f)));
-
+	
 	for (auto coin : coins) {
 		if (coin == nullptr) {
 			return false;
@@ -79,6 +82,33 @@ bool MarioGame::OnCreate() {
 
 	return true;
 
+}
+
+void MarioGame::Load() {
+	//Creates a json variable
+	json j;
+
+	//Opening and reading from a json file
+	std::ifstream i("savedata.json");
+	i >> j;
+
+	//Iterates through the json data
+	for (json::iterator it = j.begin(); it != j.end(); ++it) {
+		std::cout << j[it.key()] << std::endl;
+		if (j[it.key()]["type"] == "Terrain") {
+			/*std::string image = j[it.key()]["image"];
+			std::string * image1 = &image;
+			const char * imchar = image1->c_str();*/
+			AddBody(new Body("Sprites/coin.png", 1.0f, Vec3(j[it.key()]["x"], j[it.key()]["y"], 0), Vec3(0, 0, 0), Vec3(0, 0, 0)));
+			std::cout << "I'm here" << std::endl;
+		}
+		else if (j[it.key()]["type"] == "Enemies") {
+			//myOBJs["Enemies"].push_back(new Button(j[it.key()]["image"], Vec3(j[it.key()]["x"], j[it.key()]["y"], 0)));
+		}
+	}
+
+	//Closes the file
+	i.close();
 }
 
 void MarioGame::OnDestroy() {
