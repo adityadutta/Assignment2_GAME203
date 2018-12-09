@@ -16,6 +16,10 @@ void InputManager::HandleEvents(const SDL_Event &_event, Body* player, bool isGr
 		player->linearVelocity += (VECTOR3_RIGHT);
 		if (isGround_) {
 			anims->setAnim(*player, States::WALKING);
+			CheckFliped = true;
+		}
+		if (!isGround_) {
+			anims->setAnim(*player, States::JUMPING);
 		}
 	}
 	else if (state[SDL_SCANCODE_LEFT] || state[SDL_SCANCODE_A]) {
@@ -23,6 +27,10 @@ void InputManager::HandleEvents(const SDL_Event &_event, Body* player, bool isGr
 		player->ApplyForceToCentre(VECTOR3_LEFT * 1000);
 		if (isGround_) {
 			anims->setAnimFliped(*player, States::WALKING);
+			CheckFliped = false;
+		}
+		if (!isGround_) {
+			anims->setAnimFliped(*player, States::JUMPING);
 		}
 	}
 	else if (state[SDL_SCANCODE_SPACE]) {
@@ -30,7 +38,13 @@ void InputManager::HandleEvents(const SDL_Event &_event, Body* player, bool isGr
 		if (isGround_) {
 			printf("ground");
 			player->ApplyForceToCentre(VECTOR3_UP * 2000.0f);
-			anims->setAnim(*player, States::JUMPING);
+			if (CheckFliped == true) {
+				anims->setAnim(*player, States::JUMPING);
+			}
+			if (CheckFliped == false) {
+				anims->setAnimFliped(*player, States::JUMPING);
+			}
 		}
+
 	}
 }

@@ -23,6 +23,8 @@ bool MarioGame::OnCreate() {
 	int w, h;
 	SDL_GetWindowSize(window, &w, &h);
 	background = IMG_Load("background.png");
+
+
 	if (background == nullptr) {
 		return false;
 	}
@@ -36,6 +38,7 @@ bool MarioGame::OnCreate() {
 	anims = std::shared_ptr<Animation>(new Animation());
 
 	manager = std::unique_ptr<UIManager>(new UIManager());
+
 	if (manager == nullptr) {
 		OnDestroy();
 		return false;
@@ -58,6 +61,9 @@ bool MarioGame::OnCreate() {
 	//initializing the ground
 	ground = new Body("MarioLevel.png", 100.0f, Vec3(-20.0f, -30.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO);
 	ground->addCollider(300.0f, 6.0f);
+
+	AddToList(platforms, new Body("Sprites/Block.png", 1.0f, Vec3(-10.0f, -30.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
+	AddToList(platforms, new Body("Sprites/Block.png", 1.0f, Vec3(-15.0f, -30.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
 
 	AddToList(platforms, new Body("Sprites/Block.png", 1.0f, Vec3(-20.0f, -30.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
 	AddToList(platforms, new Body("Sprites/Block.png", 1.0f, Vec3(-25.0f, -30.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
@@ -105,6 +111,7 @@ bool MarioGame::OnCreate() {
 	//player stuff
 	playerCoins = 0;
 	playerScore = 0;
+
 
 	return true;
 
@@ -167,6 +174,7 @@ void MarioGame::OnDestroy() {
 			enemy = nullptr;
 		}
 	}
+
 }
 
 void MarioGame::Update(const float time) {
@@ -239,7 +247,17 @@ void MarioGame::Update(const float time) {
 
 	player->linearVelocity.x = MATH::clamp(player->linearVelocity.x, -10.0f, 10.0f);
 
-	cameraRect.x = player->position.x * cameraScrollSpeed; // multiplying by camera scroll speed.
+	//cameraRect.x = player->position.x * cameraScrollSpeed; // multiplying by camera scroll speed.
+
+	Vec3 Realplayer = projectionMatrix * player->position;
+
+	cameraRect.x = Realplayer.x - 320;
+	if (cameraRect.x < 0) {
+		cameraRect.x = 0;
+	}
+	if (cameraRect.y > cameraRect.h) {
+		cameraRect.y = cameraRect.h;
+	}
 
 	//update player
 	if (player) player->update(time);
@@ -256,29 +274,29 @@ void MarioGame::Render() {
 	backgroundRectangle.y = 0.0f; /// implicit type conversions BAD - probably causes a compiler warning
 	SDL_BlitSurface(background, nullptr, screenSurface, &backgroundRectangle);
 
-	Vec3 playerCoords = projectionMatrix * player->position;
+	Vec3 playerCoords = projectionMatrix * player->position ;
 
 	playerRectangle.h = player->getImage()->h;
 	playerRectangle.w = player->getImage()->w;
-	playerRectangle.x = playerCoords.x; /// implicit type conversions BAD - probably causes a compiler warning
+	playerRectangle.x = playerCoords.x - cameraRect.x; /// implicit type conversions BAD - probably causes a compiler warning
 	playerRectangle.y = playerCoords.y; /// implicit type conversions BAD - probably causes a compiler warning
 	SDL_BlitSurface(player->getImage(), nullptr, screenSurface, &playerRectangle);
 
 	Vec3  groundCoords = projectionMatrix * ground->position;
 	groundRect.h = ground->getImage()->h;
 	groundRect.w = ground->getImage()->w;
-	groundRect.x = groundCoords.x; /// implicit type conversions BAD - probably causes a compiler warning
+	groundRect.x = groundCoords.x  - cameraRect.x ; /// implicit type conversions BAD - probably causes a compiler warning
 	groundRect.y = groundCoords.y; /// implicit type conversions BAD - probably causes a compiler warning
-	SDL_BlitSurface(ground->getImage(), &cameraRect, screenSurface, &groundRect);
+	SDL_BlitSurface(ground->getImage(), nullptr, screenSurface, &groundRect);
 
 	for (auto platform : platforms) {
 		Vec3 screenCoords = projectionMatrix * platform->position;
 
 		groundRect.h = platform->getImage()->h;
 		groundRect.w = platform->getImage()->w;
-		groundRect.x = screenCoords.x; /// implicit type conversions BAD - probably causes a compiler warning
+		groundRect.x = screenCoords.x - cameraRect.x; /// implicit type conversions BAD - probably causes a compiler warning
 		groundRect.y = screenCoords.y; /// implicit type conversions BAD - probably causes a compiler warning
-		SDL_BlitSurface(platform->getImage(), &cameraRect, screenSurface, &groundRect);
+		SDL_BlitSurface(platform->getImage(), nullptr, screenSurface, &groundRect);
 	}
 
 	for (auto coin : coins) {
@@ -286,7 +304,7 @@ void MarioGame::Render() {
 
 		coinRect.h = coin->getImage()->h;
 		coinRect.w = coin->getImage()->w;
-		coinRect.x = screenCoords.x; /// implicit type conversions BAD - probably causes a compiler warning
+		coinRect.x = screenCoords.x - cameraRect.x; /// implicit type conversions BAD - probably causes a compiler warning
 		coinRect.y = screenCoords.y; /// implicit type conversions BAD - probably causes a compiler warning
 		SDL_BlitSurface(coin->getImage(), nullptr, screenSurface, &coinRect);
 	}
@@ -296,7 +314,7 @@ void MarioGame::Render() {
 
 		enemyRect.h = enemy->getImage()->h;
 		enemyRect.w = enemy->getImage()->w;
-		enemyRect.x = screenCoords.x; /// implicit type conversions BAD - probably causes a compiler warning
+		enemyRect.x = screenCoords.x - cameraRect.x; /// implicit type conversions BAD - probably causes a compiler warning
 		enemyRect.y = screenCoords.y; /// implicit type conversions BAD - probably causes a compiler warning
 		SDL_BlitSurface(enemy->getImage(), nullptr, screenSurface, &enemyRect);
 	}
@@ -304,6 +322,7 @@ void MarioGame::Render() {
 	manager->render(projectionMatrix, screenSurface);
 
 	SDL_UpdateWindowSurface(window);
+		
 }
 
 void MarioGame::HandleEvents(const SDL_Event &_event) {

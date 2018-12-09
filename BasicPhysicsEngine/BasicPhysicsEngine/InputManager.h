@@ -15,6 +15,7 @@ public:
 	~InputManager();
 
 	void HandleEvents(const SDL_Event &_event, Body*player, bool isGround_, std::shared_ptr<Animation> anims);
+	bool CheckFliped;
 };
 
 #endif

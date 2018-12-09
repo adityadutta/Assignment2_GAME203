@@ -12,6 +12,7 @@
 #include "InputManager.h"
 #include "json.hpp"
 #include <fstream>
+#include <iostream>
 
 using json = nlohmann::json;
 
@@ -52,6 +53,7 @@ private:
 	int playerScore;
 
 	void AddToList(std::vector<Body*> &list, Body* body);
+
 public:
 	MarioGame(SDL_Window* sdlWindow);
 	bool OnCreate();
