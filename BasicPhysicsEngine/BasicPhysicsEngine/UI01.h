@@ -6,17 +6,14 @@
 class UI01 : public UI {
 private:
 	//player stats, to manipulated by player object in future
-	//health stuff
+	//score stuff
 	int coins;
-	int maxHealth;
-	//Ammo stuff
-	int currentAmmo;
-	int maxAmmo;
+	int score;
 
 	//UI labels
 	UILabel* clock;
-	UILabel* ammoStats;
-	UILabel* playerStats;
+	UILabel* playerCoins;
+	UILabel* playerScore;
 
 public:
 	UI01();
@@ -29,6 +26,7 @@ public:
 	void AddLabel(UILabel* label);
 
 	void SetCoins(int _coins);
+	void SetScore(int _score);
 };
 
 #endif

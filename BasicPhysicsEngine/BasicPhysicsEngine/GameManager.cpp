@@ -19,6 +19,7 @@ bool GameManager::OnCreate() {
 
 	/*const int SCREEN_WIDTH = 1280;
 	const int SCREEN_HEIGHT = 720;*/
+
 	ptr = new Window(SCREEN_WIDTH, SCREEN_HEIGHT);
 	if (ptr == nullptr) {
 		OnDestroy();

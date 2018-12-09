@@ -6,7 +6,7 @@ Body::Body(double _mass)
 	mass = _mass;
 }
 
-Body::Body(double _mass, float _rotationalInertia)
+Body::Body(char* _imageName, double _mass, float _rotationalInertia)
 {
 	mass = _mass;
 	rotationalInertia = _rotationalInertia;
@@ -16,6 +16,11 @@ Body::Body(double _mass, float _rotationalInertia)
 	angle = 0.0f;
 	angularVelocity.SetZero();
 	angularAcceleration.SetZero();
+	bodyImage = IMG_Load(_imageName);
+	if (bodyImage == nullptr) {
+		/// What should we do?
+	}
+	isGrounded = false;
 }
 
 //constructor to pass values in the class
@@ -29,6 +34,7 @@ Body::Body(char* _imageName, double _mass, Vec3 _position, Vec3 _linearVelocity,
 	if (bodyImage == nullptr) {
 		/// What should we do?
 	}
+	isGrounded = false;
 
 }
 void Body::update(double timeStep)

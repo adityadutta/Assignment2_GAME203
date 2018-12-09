@@ -36,9 +36,10 @@ public:
 	std::vector<Vec3> vertices;
 
 	SDL_Rect collider;
+	bool isGrounded;
 
 	Body(double _mass);
-	Body(double _mass, float _rotationalInertia);
+	Body(char* _imageName, double _mass, float _rotationalInertia);
 	Body(char* _imageName, double _mass, Vec3 _position, Vec3 _linearVelocity, Vec3 _acceleration);
 	void update(double timeStep);
 	void UpdateOrientation(double timeStep);
@@ -48,9 +49,6 @@ public:
 	Vec3 getFarthestPointInDirection(const Vec3& d);
 	void addVertex(const Vec3 _vertex);
 	void addCollider(float _width, float _height);
-
-	//Shows the dot on the screen
-	void render();
 
 	SDL_Surface* getImage();
 	double getMass();

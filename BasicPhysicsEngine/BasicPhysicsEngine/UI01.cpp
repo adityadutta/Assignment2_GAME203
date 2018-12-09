@@ -12,30 +12,26 @@ UI01::UI01() {
 
 bool UI01::onCreate() {
 	TTF_Init();
-	AddElement(new UIElement("UI1_elements/playerStats.png", Vec3(18.0f, -30.0f, 0.0f)));
 
 	fontName = "Fonts/BebasNeue-Regular";
 	font = TTF_OpenFont(fontName.c_str(), 30);
 	SDL_Color color = { 255, 255, 255 };
 
 	//timer init
-	clock = new UILabel(" ", Vec3(-26.0f, -21.25f, 0.0f), color, 26);
+	clock = new UILabel(" ", Vec3(22.0f, 35.5f, 0.0f), color, 36);
 	AddLabel(clock);
-
-	//Ammo stuff init
-	currentAmmo = 30;
-	maxAmmo = 90;
-	ammoStats = new UILabel(" ", Vec3(22.0f, -34.0f, 0.0f), color, 42);
-	AddLabel(ammoStats);
 
 	//coins
 	AddElement(new UIElement("UI1_elements/coin.png", Vec3(-28.0f, 35.0f, 0.0f)));
 
 	coins = 0;
-	playerStats = new UILabel(" ", Vec3(-25.0f, 35.5f, 0.0f), color, 36);
-	AddLabel(playerStats);
+	playerCoins = new UILabel(" ", Vec3(-25.0f, 35.5f, 0.0f), color, 36);
+	AddLabel(playerCoins);
 
-	AddLabel(new UILabel("FPS User Interface", Vec3(-29.0f, 51.0f, 0.0f), color, 26));
+	//score
+	score = 0;
+	playerScore = new UILabel(" ", Vec3(-5.0f, 35.5f, 0.0f), color, 36);
+	AddLabel(playerScore);
 
 	for (auto label : ui_labels) {
 		label->SetFont(fontName);
@@ -94,13 +90,12 @@ void UI01::update(const float time) {
 	std::string timerText = minutes + ":" + seconds;
 	clock->text = timerText;
 
-	//ammo stuff
-	std::string ammoText = std::to_string(currentAmmo) + " / " + std::to_string(maxAmmo);
-	ammoStats->text = ammoText;
-
 	//health stuff
 	std::string coinText = " x " + std::to_string(coins);
-	playerStats->text = coinText;
+	playerCoins->text = coinText;
+
+	std::string scoreText = " SCORE : " + std::to_string(score);
+	playerScore->text = scoreText;
 }
 
 void UI01::render(Matrix4 _projectionMatrix, SDL_Surface * _screenSurface) {
@@ -152,4 +147,9 @@ void UI01::AddLabel(UILabel * label) {
 void UI01::SetCoins(int _coins)
 {
 	coins = _coins;
+}
+
+void UI01::SetScore(int _score)
+{
+	score = _score;
 }

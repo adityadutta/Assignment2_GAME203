@@ -24,8 +24,9 @@ private:
 
 	Body* player;
 	Body* ground;
+	std::vector<Body*> platforms;
 	std::vector<Body*> coins;
-	SDL_Renderer *renderer;
+	std::vector<Body*> enemies;
 
 	float elapsedTime;
 	bool isRunning;
@@ -36,6 +37,7 @@ private:
 	SDL_Rect backgroundRectangle;
 	SDL_Rect groundRect;
 	SDL_Rect coinRect;
+	SDL_Rect enemyRect;
 
 	SDL_Rect cameraRect;
 	float cameraScrollSpeed;
@@ -46,9 +48,10 @@ private:
 	std::unique_ptr<UIManager> manager; //object UIManager 
 
 	//player stuff
-	bool isGrounded = false;
 	int playerCoins;
+	int playerScore;
 
+	void AddToList(std::vector<Body*> &list, Body* body);
 public:
 	MarioGame(SDL_Window* sdlWindow);
 	bool OnCreate();
@@ -56,8 +59,7 @@ public:
 	void OnDestroy();
 	void Update(const float time);
 	void Render();
-	void HandleEvents(const SDL_Event &_event);
-	void AddBody(Body* body);
+	void HandleEvents(const SDL_Event &_event);	
 };
 
 #endif //!MARIOGAME_H

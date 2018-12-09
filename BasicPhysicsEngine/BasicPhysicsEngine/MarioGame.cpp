@@ -22,7 +22,6 @@ bool MarioGame::OnCreate() {
 
 	int w, h;
 	SDL_GetWindowSize(window, &w, &h);
-	renderer = SDL_CreateRenderer(window, -1, 0);
 	background = IMG_Load("background.png");
 	if (background == nullptr) {
 		return false;
@@ -53,21 +52,37 @@ bool MarioGame::OnCreate() {
 	IMG_Init(IMG_INIT_PNG);
 
 	//initializing the player
-	player = new Body("MarioBigIdle.png", 10.0f, Vec3(0.0f, -15.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f));
+	player = new Body("MarioBigIdle.png", 10.0f, Vec3(0.0f, -15.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO);
 	player->addCollider(3.0f, 6.0f);
 
-	//initializing the player
-	ground = new Body("MarioLevel.png", 100.0f, Vec3(-20.0f, -30.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f));
+	//initializing the ground
+	ground = new Body("MarioLevel.png", 100.0f, Vec3(-20.0f, -30.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO);
 	ground->addCollider(300.0f, 6.0f);
 
+	AddToList(platforms, new Body("Sprites/Block.png", 1.0f, Vec3(-20.0f, -30.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
+	AddToList(platforms, new Body("Sprites/Block.png", 1.0f, Vec3(-25.0f, -30.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
+	AddToList(platforms, new Body("Sprites/Block.png", 1.0f, Vec3(-30.0f, -30.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
+	AddToList(platforms, new Body("Sprites/Block.png", 1.0f, Vec3(-40.0f, -30.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
+
 	// Read from a file
-	MarioGame::Load();
-	
-	AddBody(new Body("Sprites/coin.png", 1.0f, Vec3(16.0f, -15.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f)));
-	AddBody(new Body("Sprites/coin.png", 1.0f, Vec3(10.0f, -24.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f)));
-	AddBody(new Body("Sprites/coin.png", 1.0f, Vec3(8.0f, -24.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f)));
-	AddBody(new Body("Sprites/coin.png", 1.0f, Vec3(12.0f, -24.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f)));
-	
+	//MarioGame::Load();
+
+	AddToList(coins, new Body("Sprites/coin.png", 1.0f, Vec3(16.0f, -15.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
+	AddToList(coins, new Body("Sprites/coin.png", 1.0f, Vec3(10.0f, -24.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
+	AddToList(coins, new Body("Sprites/coin.png", 1.0f, Vec3(8.0f, -24.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
+	AddToList(coins, new Body("Sprites/coin.png", 1.0f, Vec3(12.0f, -24.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
+
+	AddToList(enemies, new Body("Sprites/GoombaWalk1.png", 1.0f, Vec3(15.0f, -15.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f)));
+
+	for (auto platform : platforms) {
+		if (platform == nullptr) {
+			return false;
+		}
+		else {
+			platform->addCollider(16.0f, 16.0f);
+		}
+	}
+
 	for (auto coin : coins) {
 		if (coin == nullptr) {
 			return false;
@@ -77,8 +92,19 @@ bool MarioGame::OnCreate() {
 		}
 	}
 
+	for (auto enemy : enemies) {
+		if (enemy == nullptr) {
+			return false;
+		}
+		else {
+			enemy->addCollider(16.0f, 10.0f);
+			enemy->linearVelocity.Set(VECTOR3_LEFT);
+		}
+	}
+
 	//player stuff
 	playerCoins = 0;
+	playerScore = 0;
 
 	return true;
 
@@ -95,15 +121,12 @@ void MarioGame::Load() {
 	//Iterates through the json data
 	for (json::iterator it = j.begin(); it != j.end(); ++it) {
 		std::cout << j[it.key()] << std::endl;
-		if (j[it.key()]["type"] == "Terrain") {
-			/*std::string image = j[it.key()]["image"];
-			std::string * image1 = &image;
-			const char * imchar = image1->c_str();*/
-			AddBody(new Body("Sprites/coin.png", 1.0f, Vec3(j[it.key()]["x"], j[it.key()]["y"], 0), Vec3(0, 0, 0), Vec3(0, 0, 0)));
+		if (j[it.key()]["type"] == "Collectible") {
+			AddToList(coins, new Body("Sprites/coin.png", 1.0f, Vec3(j[it.key()]["x"], j[it.key()]["y"], 0), VECTOR3_ZERO, VECTOR3_ZERO));
 			std::cout << "I'm here" << std::endl;
 		}
 		else if (j[it.key()]["type"] == "Enemies") {
-			//myOBJs["Enemies"].push_back(new Button(j[it.key()]["image"], Vec3(j[it.key()]["x"], j[it.key()]["y"], 0)));
+			AddToList(enemies, new Body("Sprites/GoombaWalk1.png", 1.0f, Vec3(j[it.key()]["x"], j[it.key()]["y"], 0), VECTOR3_ZERO, VECTOR3_ZERO));
 		}
 	}
 
@@ -124,6 +147,13 @@ void MarioGame::OnDestroy() {
 		ground = nullptr;
 	}
 
+	for (auto platform : platforms) {
+		if (platform) {
+			delete platform;
+			platform = nullptr;
+		}
+	}
+
 	for (auto coin : coins) {
 		if (coin) {
 			delete coin;
@@ -131,7 +161,12 @@ void MarioGame::OnDestroy() {
 		}
 	}
 
-	SDL_DestroyRenderer(renderer);
+	for (auto enemy : enemies) {
+		if (enemy) {
+			delete enemy;
+			enemy = nullptr;
+		}
+	}
 }
 
 void MarioGame::Update(const float time) {
@@ -140,29 +175,66 @@ void MarioGame::Update(const float time) {
 	manager->update(elapsedTime);
 
 	if (Collider::checkCollision(player->collider, ground->collider)) {
-		isGrounded = true;
+		player->isGrounded = true;
 		player->linearVelocity.y = 0.0f;
 	}
 	else {
-		isGrounded = false;
+		player->isGrounded = false;
 	}
 
-	if (!isGrounded) {
+	/*for (int i = 0; i < platforms.size(); i++) {
+		if (Collider::checkCollision(player->collider, platforms[i]->collider)) {
+			player->isGrounded = true;
+			player->linearVelocity.y = 0.0f;
+		}
+		else {
+			player->isGrounded = false;
+		}
+	}*/
+
+
+	if (!player->isGrounded) {
 		player->acceleration.y += -9.81f;
 	}
 
-	//check collision of player with balls
+	//check collision of player with coins
 	for (int i = 0; i < coins.size(); i++) {
-		if (Collider::checkCollision(player->collider, coins[i]->collider)) {
-			++playerCoins;
-			std::cout<< playerCoins << "\n";
+		if (Collider::checkCollision(player->collider, coins[i]->collider)) {		
+			std::cout << playerCoins << "\n";
 			//Collider::HandleCollision(*player, *coins[i], 1.0f);
 			auto it = std::find(coins.begin(), coins.end(), coins[i]);
 			if (it != coins.end()) {
 				coins.erase(it);
+				++playerCoins;
+				manager->getCurrentUI()->SetCoins(playerCoins);
 			}
-			manager->getCurrentUI()->SetCoins(playerCoins);
 		}
+	}
+
+
+	//check collision of player with enemies
+	for (int i = 0; i < enemies.size(); i++) {
+		if (Collider::checkCollision(player->collider, enemies[i]->collider)) {
+			//Collider::HandleCollision(*player, *coins[i], 1.0f);
+			auto it = std::find(enemies.begin(), enemies.end(), enemies[i]);
+			if (it != enemies.end()) {
+				enemies.erase(it);
+				std::cout << "Goomba died!";
+				playerScore += 100;
+				manager->getCurrentUI()->SetScore(playerScore);
+			}
+		}
+	}
+
+	for (int i = 0; i < enemies.size(); i++) {
+		if (Collider::checkCollision(enemies[i]->collider, ground->collider)) {
+			enemies[i]->isGrounded = true;
+			enemies[i]->linearVelocity.y = 0.0f;
+		}
+		if (!enemies[i]->isGrounded) {
+			enemies[i]->acceleration.y += -10.0f;
+		}
+		if (enemies[i]) enemies[i]->update(time);
 	}
 
 	player->linearVelocity.x = MATH::clamp(player->linearVelocity.x, -10.0f, 10.0f);
@@ -192,6 +264,23 @@ void MarioGame::Render() {
 	playerRectangle.y = playerCoords.y; /// implicit type conversions BAD - probably causes a compiler warning
 	SDL_BlitSurface(player->getImage(), nullptr, screenSurface, &playerRectangle);
 
+	Vec3  groundCoords = projectionMatrix * ground->position;
+	groundRect.h = ground->getImage()->h;
+	groundRect.w = ground->getImage()->w;
+	groundRect.x = groundCoords.x; /// implicit type conversions BAD - probably causes a compiler warning
+	groundRect.y = groundCoords.y; /// implicit type conversions BAD - probably causes a compiler warning
+	SDL_BlitSurface(ground->getImage(), &cameraRect, screenSurface, &groundRect);
+
+	for (auto platform : platforms) {
+		Vec3 screenCoords = projectionMatrix * platform->position;
+
+		groundRect.h = platform->getImage()->h;
+		groundRect.w = platform->getImage()->w;
+		groundRect.x = screenCoords.x; /// implicit type conversions BAD - probably causes a compiler warning
+		groundRect.y = screenCoords.y; /// implicit type conversions BAD - probably causes a compiler warning
+		SDL_BlitSurface(platform->getImage(), &cameraRect, screenSurface, &groundRect);
+	}
+
 	for (auto coin : coins) {
 		Vec3 screenCoords = projectionMatrix * coin->position;
 
@@ -202,12 +291,15 @@ void MarioGame::Render() {
 		SDL_BlitSurface(coin->getImage(), nullptr, screenSurface, &coinRect);
 	}
 
-	Vec3 collectorCoords = projectionMatrix * ground->position;
-	groundRect.h = ground->getImage()->h;
-	groundRect.w = ground->getImage()->w;
-	groundRect.x = collectorCoords.x; /// implicit type conversions BAD - probably causes a compiler warning
-	groundRect.y = collectorCoords.y; /// implicit type conversions BAD - probably causes a compiler warning
-	SDL_BlitSurface(ground->getImage(), &cameraRect, screenSurface, &groundRect);
+	for (auto enemy : enemies) {
+		Vec3 screenCoords = projectionMatrix * enemy->position;
+
+		enemyRect.h = enemy->getImage()->h;
+		enemyRect.w = enemy->getImage()->w;
+		enemyRect.x = screenCoords.x; /// implicit type conversions BAD - probably causes a compiler warning
+		enemyRect.y = screenCoords.y; /// implicit type conversions BAD - probably causes a compiler warning
+		SDL_BlitSurface(enemy->getImage(), nullptr, screenSurface, &enemyRect);
+	}
 
 	manager->render(projectionMatrix, screenSurface);
 
@@ -215,13 +307,12 @@ void MarioGame::Render() {
 }
 
 void MarioGame::HandleEvents(const SDL_Event &_event) {
-	HandleControls->HandleEvents(_event, player, isGrounded, anims);
+	HandleControls->HandleEvents(_event, player, player->isGrounded, anims);
 	manager->handleEvents(_event);
 }
 
 
-
-void MarioGame::AddBody(Body* body)
+void MarioGame::AddToList(std::vector<Body*> &list, Body * body)
 {
-	coins.push_back(body);
+	list.push_back(body);
 }

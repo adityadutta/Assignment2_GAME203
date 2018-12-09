@@ -29,8 +29,8 @@ void InputManager::HandleEvents(const SDL_Event &_event, Body* player, bool isGr
 		//player->ApplyForceToCentre(VECTOR3_UP * 3000);
 		if (isGround_) {
 			printf("ground");
-			player->ApplyForceToCentre(VECTOR3_UP * 3200.0f);
-			//anims->setAnim(*player, States::JUMPING);
+			player->ApplyForceToCentre(VECTOR3_UP * 2000.0f);
+			anims->setAnim(*player, States::JUMPING);
 		}
 	}
 }
