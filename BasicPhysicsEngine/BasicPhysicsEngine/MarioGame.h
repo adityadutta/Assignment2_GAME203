@@ -23,6 +23,8 @@ private:
 	SDL_Window *window;
 	Matrix4 projectionMatrix;
 
+	SDL_Renderer* renderer;
+
 	Body* player;
 	Body* ground;
 	std::vector<Body*> platforms;
@@ -53,6 +55,7 @@ private:
 	int playerScore;
 
 	void AddToList(std::vector<Body*> &list, Body* body);
+	void drawColliders(SDL_Rect _rect, Vec3 _color);
 
 public:
 	MarioGame(SDL_Window* sdlWindow);

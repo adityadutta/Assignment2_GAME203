@@ -23,7 +23,7 @@ bool MarioGame::OnCreate() {
 	int w, h;
 	SDL_GetWindowSize(window, &w, &h);
 	background = IMG_Load("background.png");
-
+	renderer = SDL_CreateRenderer(window, -1, 0);
 
 	if (background == nullptr) {
 		return false;
@@ -56,11 +56,11 @@ bool MarioGame::OnCreate() {
 
 	//initializing the player
 	player = new Body("MarioBigIdle.png", 10.0f, Vec3(0.0f, -15.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO);
-	player->addCollider(3.0f, 6.0f);
+	player->addCollider(10.0f, 24.0f);
 
 	//initializing the ground
 	ground = new Body("MarioLevel.png", 100.0f, Vec3(-20.0f, -30.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO);
-	ground->addCollider(300.0f, 6.0f);
+	ground->addCollider(100.0f, 4.0f);
 
 	AddToList(platforms, new Body("Sprites/Block.png", 1.0f, Vec3(-10.0f, -30.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
 	AddToList(platforms, new Body("Sprites/Block.png", 1.0f, Vec3(-15.0f, -30.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
@@ -69,6 +69,7 @@ bool MarioGame::OnCreate() {
 	AddToList(platforms, new Body("Sprites/Block.png", 1.0f, Vec3(-25.0f, -30.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
 	AddToList(platforms, new Body("Sprites/Block.png", 1.0f, Vec3(-30.0f, -30.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
 	AddToList(platforms, new Body("Sprites/Block.png", 1.0f, Vec3(-40.0f, -30.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
+	AddToList(platforms, new Body("Sprites/Block.png", 1.0f, Vec3(20.0f, -20.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
 
 	// Read from a file
 	//MarioGame::Load();
@@ -85,7 +86,7 @@ bool MarioGame::OnCreate() {
 			return false;
 		}
 		else {
-			platform->addCollider(16.0f, 16.0f);
+			platform->addCollider(1.0f, 1.0f);
 		}
 	}
 
@@ -103,7 +104,7 @@ bool MarioGame::OnCreate() {
 			return false;
 		}
 		else {
-			enemy->addCollider(16.0f, 10.0f);
+			enemy->addCollider(16.0f, 2.0f);
 			enemy->linearVelocity.Set(VECTOR3_LEFT);
 		}
 	}
@@ -190,15 +191,17 @@ void MarioGame::Update(const float time) {
 		player->isGrounded = false;
 	}
 
-	/*for (int i = 0; i < platforms.size(); i++) {
+	for (int i = 0; i < platforms.size(); i++) {
 		if (Collider::checkCollision(player->collider, platforms[i]->collider)) {
+			std::cout << "Collided Platform!";
 			player->isGrounded = true;
 			player->linearVelocity.y = 0.0f;
 		}
-		else {
-			player->isGrounded = false;
-		}
-	}*/
+	}
+	//	else {
+	//		player->isGrounded = false;
+	//	}
+	//}
 
 
 	if (!player->isGrounded) {
@@ -207,7 +210,7 @@ void MarioGame::Update(const float time) {
 
 	//check collision of player with coins
 	for (int i = 0; i < coins.size(); i++) {
-		if (Collider::checkCollision(player->collider, coins[i]->collider)) {		
+		if (Collider::checkCollision(player->collider, coins[i]->collider)) {
 			std::cout << playerCoins << "\n";
 			//Collider::HandleCollision(*player, *coins[i], 1.0f);
 			auto it = std::find(coins.begin(), coins.end(), coins[i]);
@@ -223,7 +226,6 @@ void MarioGame::Update(const float time) {
 	//check collision of player with enemies
 	for (int i = 0; i < enemies.size(); i++) {
 		if (Collider::checkCollision(player->collider, enemies[i]->collider)) {
-			//Collider::HandleCollision(*player, *coins[i], 1.0f);
 			auto it = std::find(enemies.begin(), enemies.end(), enemies[i]);
 			if (it != enemies.end()) {
 				enemies.erase(it);
@@ -235,7 +237,9 @@ void MarioGame::Update(const float time) {
 	}
 
 	for (int i = 0; i < enemies.size(); i++) {
-		if (Collider::checkCollision(enemies[i]->collider, ground->collider)) {
+		//if (Collider::checkCollision(enemies[i]->collider, ground->collider)) {
+		if (SDL_HasIntersection(&enemies[i]->collider, &ground->collider)){
+			std::cout << "Goomba Collided!";
 			enemies[i]->isGrounded = true;
 			enemies[i]->linearVelocity.y = 0.0f;
 		}
@@ -274,7 +278,7 @@ void MarioGame::Render() {
 	backgroundRectangle.y = 0.0f; /// implicit type conversions BAD - probably causes a compiler warning
 	SDL_BlitSurface(background, nullptr, screenSurface, &backgroundRectangle);
 
-	Vec3 playerCoords = projectionMatrix * player->position ;
+	Vec3 playerCoords = projectionMatrix * player->position;
 
 	playerRectangle.h = player->getImage()->h;
 	playerRectangle.w = player->getImage()->w;
@@ -285,7 +289,7 @@ void MarioGame::Render() {
 	Vec3  groundCoords = projectionMatrix * ground->position;
 	groundRect.h = ground->getImage()->h;
 	groundRect.w = ground->getImage()->w;
-	groundRect.x = groundCoords.x  - cameraRect.x ; /// implicit type conversions BAD - probably causes a compiler warning
+	groundRect.x = groundCoords.x - cameraRect.x; /// implicit type conversions BAD - probably causes a compiler warning
 	groundRect.y = groundCoords.y; /// implicit type conversions BAD - probably causes a compiler warning
 	SDL_BlitSurface(ground->getImage(), nullptr, screenSurface, &groundRect);
 
@@ -310,6 +314,8 @@ void MarioGame::Render() {
 	}
 
 	for (auto enemy : enemies) {
+		drawColliders(enemy->collider, VECTOR3_ZERO);
+
 		Vec3 screenCoords = projectionMatrix * enemy->position;
 
 		enemyRect.h = enemy->getImage()->h;
@@ -321,8 +327,15 @@ void MarioGame::Render() {
 
 	manager->render(projectionMatrix, screenSurface);
 
-	SDL_UpdateWindowSurface(window);
-		
+	//Clear the screen.
+	SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+	SDL_RenderClear(renderer);
+
+	drawColliders(player->collider, VECTOR3_ZERO);
+	drawColliders(ground->collider, VECTOR3_ZERO);
+
+	//SDL_UpdateWindowSurface(window);
+
 }
 
 void MarioGame::HandleEvents(const SDL_Event &_event) {
@@ -334,4 +347,17 @@ void MarioGame::HandleEvents(const SDL_Event &_event) {
 void MarioGame::AddToList(std::vector<Body*> &list, Body * body)
 {
 	list.push_back(body);
+}
+
+void MarioGame::drawColliders(SDL_Rect _rect, Vec3 _color)
+{
+	SDL_SetRenderDrawColor(renderer, 0x00, 0xFF, 0x00, 0xFF);
+	Vec3 screenCoords = projectionMatrix * Vec3(_rect.x, _rect.y, 0.0f);
+	groundRect.h = _rect.h;
+	groundRect.w = _rect.w;
+	groundRect.x = screenCoords.x;
+	groundRect.y = screenCoords.y;
+	SDL_RenderDrawRect(renderer, &groundRect);
+	//Update the Renderer.
+	SDL_RenderPresent(renderer);
 }

@@ -37,7 +37,7 @@ void InputManager::HandleEvents(const SDL_Event &_event, Body* player, bool isGr
 		//player->ApplyForceToCentre(VECTOR3_UP * 3000);
 		if (isGround_) {
 			printf("ground");
-			player->ApplyForceToCentre(VECTOR3_UP * 2000.0f);
+			player->ApplyForceToCentre(VECTOR3_UP * 3000.0f);
 			if (CheckFliped == true) {
 				anims->setAnim(*player, States::JUMPING);
 			}

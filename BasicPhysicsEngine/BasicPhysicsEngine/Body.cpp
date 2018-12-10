@@ -106,10 +106,10 @@ void Body::addVertex(const Vec3 _vertex)
 
 void Body::addCollider(float _width, float _height)
 {
-	collider.h = _height;
-	collider.w = _width;
 	collider.x = position.x;
 	collider.y = position.y;
+	collider.h = _height;
+	collider.w = _width;
 }
 
 void Body::shiftColliders()
