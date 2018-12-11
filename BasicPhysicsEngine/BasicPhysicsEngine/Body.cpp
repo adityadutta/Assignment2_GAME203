@@ -108,8 +108,10 @@ void Body::addCollider(float _width, float _height)
 {
 	collider.x = position.x;
 	collider.y = position.y;
-	collider.h = _height;
-	collider.w = _width;
+	collider.h = bodyImage->h;
+	collider.w = bodyImage->w;
+	/*collider.h = _height;
+	collider.w = _width;*/
 }
 
 void Body::shiftColliders()

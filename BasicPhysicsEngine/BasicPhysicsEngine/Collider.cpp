@@ -43,16 +43,18 @@ bool Collider::checkCollision(SDL_Rect a, SDL_Rect b)
 	rightB = b.x + b.w;
 	topB = b.y;
 	bottomB = b.y + b.h;
+	
 	//If any of the sides from A are outside of B
+	if (topA >= bottomB)
+	{
+		return false;
+	}
+	
 	if (bottomA <= topB)
 	{
 		return false;
 	}
 
-	if (topA >= bottomB)
-	{
-		return false;
-	}
 
 	if (rightA <= leftB)
 	{

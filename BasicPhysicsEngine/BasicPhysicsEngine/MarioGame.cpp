@@ -60,7 +60,7 @@ bool MarioGame::OnCreate() {
 
 	//initializing the ground
 	ground = new Body("MarioLevel.png", 100.0f, Vec3(-20.0f, -30.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO);
-	ground->addCollider(100.0f, 4.0f);
+	ground->addCollider(100.0f, 6.0f);
 
 	AddToList(platforms, new Body("Sprites/Block.png", 1.0f, Vec3(-10.0f, -30.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
 	AddToList(platforms, new Body("Sprites/Block.png", 1.0f, Vec3(-15.0f, -30.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
@@ -237,9 +237,7 @@ void MarioGame::Update(const float time) {
 	}
 
 	for (int i = 0; i < enemies.size(); i++) {
-		//if (Collider::checkCollision(enemies[i]->collider, ground->collider)) {
-		if (SDL_HasIntersection(&enemies[i]->collider, &ground->collider)){
-			std::cout << "Goomba Collided!";
+		if (Collider::checkCollision(enemies[i]->collider, ground->collider)) {
 			enemies[i]->isGrounded = true;
 			enemies[i]->linearVelocity.y = 0.0f;
 		}
@@ -314,8 +312,6 @@ void MarioGame::Render() {
 	}
 
 	for (auto enemy : enemies) {
-		drawColliders(enemy->collider, VECTOR3_ZERO);
-
 		Vec3 screenCoords = projectionMatrix * enemy->position;
 
 		enemyRect.h = enemy->getImage()->h;
@@ -330,6 +326,9 @@ void MarioGame::Render() {
 	//Clear the screen.
 	SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 	SDL_RenderClear(renderer);
+
+	if (enemies.size() > 0)
+		drawColliders(enemies[0]->collider, VECTOR3_ZERO);
 
 	drawColliders(player->collider, VECTOR3_ZERO);
 	drawColliders(ground->collider, VECTOR3_ZERO);
