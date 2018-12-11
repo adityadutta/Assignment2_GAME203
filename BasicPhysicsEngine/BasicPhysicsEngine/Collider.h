@@ -9,7 +9,6 @@ namespace A3Engine {
 	class Collider
 	{
 	public:
-		static bool CollisionCheck(const Body &body1, const Body &body2);
 		static bool CollisionCheck(const Body &body1, const Body &body2, float _radius);
 		static bool checkCollision(SDL_Rect a, SDL_Rect b);
 		static void HandleCollision(Body &body1, Body &body2, float _cor);
