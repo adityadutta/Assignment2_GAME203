@@ -4,6 +4,10 @@
 #include <cstdlib>  // For srand() and rand()
 
 #include "MarioGame.h"
+#include"Body.h"
+#include"MMath.h"
+#include"Collider.h"
+#include"UIManager.h"
 
 using namespace A3Engine;
 
@@ -46,17 +50,17 @@ bool MarioGame::OnCreate() {
 	}
 
 	float aspectRatio = (float)w / (float)h;
-	projectionMatrix = MMath::viewportNDC(w, h) * MMath::orthographic(0.0f, 780.0f, 0.0f, 400.0f, 0.0f, 1.0f);
+	projectionMatrix = MMath::viewportNDC(w, h) * MMath::orthographic(-30.0f, 30.0f, -30.0f * aspectRatio, 30.0f * aspectRatio, 0.0f, 1.0f);
 
 	IMG_Init(IMG_INIT_PNG);
 
 	//initializing the player
-	player = new Body("MarioBigIdle.png", 10.0f, Vec3(5.0f, 240.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO);
-	player->addCollider(14.0f, 27.0f);
+	player = new Body("MarioBigIdle.png", 10.0f, Vec3(0.0f, -15.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO);
+	player->addCollider(10.0f, 24.0f);
 
 	//initializing the ground
-	ground = new Body("MarioLevel.png", 100.0f, Vec3(0.0f, 200.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO);
-	ground->addCollider(35.0f, 6.0f);
+	ground = new Body("MarioLevel.png", 100.0f, Vec3(-20.0f, -30.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO);
+	ground->addCollider(100.0f, 6.0f);
 
 	AddToList(platforms, new Body("Sprites/Block.png", 1.0f, Vec3(-10.0f, -30.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
 	AddToList(platforms, new Body("Sprites/Block.png", 1.0f, Vec3(-15.0f, -30.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
@@ -68,7 +72,7 @@ bool MarioGame::OnCreate() {
 	AddToList(platforms, new Body("Sprites/Block.png", 1.0f, Vec3(20.0f, -20.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
 
 	// Read from a file
-	MarioGame::Load();
+	//MarioGame::Load();
 
 	AddToList(coins, new Body("Sprites/coin.png", 1.0f, Vec3(16.0f, -15.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
 	AddToList(coins, new Body("Sprites/coin.png", 1.0f, Vec3(10.0f, -24.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
@@ -82,7 +86,7 @@ bool MarioGame::OnCreate() {
 			return false;
 		}
 		else {
-			//platform->addCollider(32.0f, 32.0f);
+			platform->addCollider(1.0f, 1.0f);
 		}
 	}
 
@@ -100,7 +104,7 @@ bool MarioGame::OnCreate() {
 			return false;
 		}
 		else {
-			enemy->addCollider(2.0f, 2.0f);
+			enemy->addCollider(16.0f, 2.0f);
 			enemy->linearVelocity.Set(VECTOR3_LEFT);
 		}
 	}
@@ -119,20 +123,18 @@ void MarioGame::Load() {
 	json j;
 
 	//Opening and reading from a json file
-	std::ifstream i("savedata2.json");
+	std::ifstream i("savedata.json");
 	i >> j;
 
 	//Iterates through the json data
 	for (json::iterator it = j.begin(); it != j.end(); ++it) {
 		std::cout << j[it.key()] << std::endl;
-		if (j[it.key()]["type"] == "Coin") {
+		if (j[it.key()]["type"] == "Collectible") {
 			AddToList(coins, new Body("Sprites/coin.png", 1.0f, Vec3(j[it.key()]["x"], j[it.key()]["y"], 0), VECTOR3_ZERO, VECTOR3_ZERO));
+			std::cout << "I'm here" << std::endl;
 		}
-		if (j[it.key()]["type"] == "Enemies") {
+		else if (j[it.key()]["type"] == "Enemies") {
 			AddToList(enemies, new Body("Sprites/GoombaWalk1.png", 1.0f, Vec3(j[it.key()]["x"], j[it.key()]["y"], 0), VECTOR3_ZERO, VECTOR3_ZERO));
-		}
-		if (j[it.key()]["type"] == "Terrain") {
-			AddToList(platforms, new Body("Sprites/Block.png", 1.0f, Vec3(j[it.key()]["x"], j[it.key()]["y"], 0), VECTOR3_ZERO, VECTOR3_ZERO));
 		}
 	}
 
@@ -189,23 +191,23 @@ void MarioGame::Update(const float time) {
 		player->isGrounded = false;
 	}
 
-	//for (int i = 0; i < platforms.size(); i++) {
-	//	if (Collider::checkCollision(player->collider, platforms[i]->collider)) {
-	//		//std::cout << "Collided Platform!";
-	//		player->isGrounded = true;
-	//		player->linearVelocity.y = 0.0f;
-	//	}
-	//}
+	for (int i = 0; i < platforms.size(); i++) {
+		if (Collider::checkCollision(player->collider, platforms[i]->collider)) {
+			std::cout << "Collided Platform!";
+			player->isGrounded = true;
+			player->linearVelocity.y = 0.0f;
+		}
+	}
 	//	else {
 	//		player->isGrounded = false;
 	//	}
 	//}
 
 
-	/*if (!player->isGrounded) {
+	if (!player->isGrounded) {
 		player->acceleration.y += -9.81f;
 	}
-*/
+
 	//check collision of player with coins
 	for (int i = 0; i < coins.size(); i++) {
 		if (Collider::checkCollision(player->collider, coins[i]->collider)) {
@@ -251,7 +253,7 @@ void MarioGame::Update(const float time) {
 
 	Vec3 Realplayer = projectionMatrix * player->position;
 
-	cameraRect.x = Realplayer.x - (780 / 2);
+	cameraRect.x = Realplayer.x - 320;
 	if (cameraRect.x < 0) {
 		cameraRect.x = 0;
 	}
@@ -325,17 +327,13 @@ void MarioGame::Render() {
 	SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 	SDL_RenderClear(renderer);
 
-	/*if (enemies.size() > 0)
+	if (enemies.size() > 0)
 		drawColliders(enemies[0]->collider, VECTOR3_ZERO);
-	if (coins.size() > 0)
-		drawColliders(coins[0]->collider, VECTOR3_ZERO);
-	for (auto platform : platforms) {
-		drawColliders(platform->collider, VECTOR3_ZERO);
-	}
-	drawColliders(player->collider, VECTOR3_ZERO);
-	drawColliders(ground->collider, VECTOR3_ZERO);*/
 
-	SDL_UpdateWindowSurface(window);
+	drawColliders(player->collider, VECTOR3_ZERO);
+	drawColliders(ground->collider, VECTOR3_ZERO);
+
+	//SDL_UpdateWindowSurface(window);
 
 }
 

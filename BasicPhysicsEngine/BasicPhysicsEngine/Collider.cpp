@@ -16,6 +16,14 @@ bool Collider::CollisionCheck(const Body &body1, const Body &body2, float _radiu
 	return false;
 }
 
+bool Collider::CollisionCheck(const Body &body1, const Body &body2)
+{
+	if ( Vec3::Distance(body1.position, body2.position) < 31.8f) {
+		return true;
+	}
+	return false;
+}
+
 bool Collider::checkCollision(SDL_Rect a, SDL_Rect b)
 {
 	//The sides of the rectangles
