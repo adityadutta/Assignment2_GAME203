@@ -4,7 +4,7 @@
 #include<SDL.h>
 #include<SDL_image.h>
 #include<vector>
-
+#include<string>
 #include"Vector.h"
 
 using namespace MATH;
@@ -40,7 +40,7 @@ public:
 
 	Body(double _mass);
 	Body(char* _imageName, double _mass, float _rotationalInertia);
-	Body(char* _imageName, double _mass, Vec3 _position, Vec3 _linearVelocity, Vec3 _acceleration);
+	Body(std::string _imageName, double _mass, Vec3 _position, Vec3 _linearVelocity, Vec3 _acceleration);
 	void update(double timeStep);
 	void UpdateOrientation(double timeStep);
 	void ApplyTorque(const Vec3& _torque);
@@ -53,6 +53,10 @@ public:
 	SDL_Surface* getImage();
 	double getMass();
 	float getRotationalInertia();
+
+
+	std::vector<Body*> projectiles;	
+	void Shoot();
 
 };
 #endif //!BODY_H

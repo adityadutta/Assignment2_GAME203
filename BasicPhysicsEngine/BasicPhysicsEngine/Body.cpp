@@ -24,17 +24,22 @@ Body::Body(char* _imageName, double _mass, float _rotationalInertia)
 }
 
 //constructor to pass values in the class
-Body::Body(char* _imageName, double _mass, Vec3 _position, Vec3 _linearVelocity, Vec3 _acceleration)
+Body::Body(std::string _imageName, double _mass, Vec3 _position, Vec3 _linearVelocity, Vec3 _acceleration)
 {
 	mass = _mass;
 	position = _position;
 	linearVelocity = _linearVelocity;
 	acceleration = _acceleration;
-	bodyImage = IMG_Load(_imageName);
+	bodyImage = IMG_Load(_imageName.c_str());
 	if (bodyImage == nullptr) {
 		/// What should we do?
 	}
 	isGrounded = false;
+
+	collider.x = position.x;
+	collider.y = position.y;
+	collider.h = bodyImage->h;
+	collider.w = bodyImage->w;
 
 }
 void Body::update(double timeStep)
@@ -106,16 +111,6 @@ void Body::addVertex(const Vec3 _vertex)
 
 void Body::addCollider(float _width, float _height)
 {
-	collider.x = position.x;
-	collider.y = position.y;
-	collider.h = bodyImage->h;
-	collider.w = bodyImage->w;
-	/*collider.h = _height;
-	collider.w = _width;*/
-}
-
-void Body::shiftColliders()
-{
 	
 }
 
@@ -136,4 +131,8 @@ double Body::getMass() {
 
 float Body::getRotationalInertia() {
 	return rotationalInertia;
+}
+
+void Body::Shoot() {
+	projectiles.push_back(new Body("Sprites/Mario/Fireball.png", 1.0f, position + Vec3(0.0f, 4.0f, 0.0f), Vec3(VECTOR3_RIGHT * 300.0f), VECTOR3_ZERO));
 }

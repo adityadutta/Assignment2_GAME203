@@ -18,20 +18,25 @@ bool UI01::onCreate() {
 	SDL_Color color = { 255, 255, 255 };
 
 	//timer init
-	clock = new UILabel(" ", Vec3(22.0f, 35.5f, 0.0f), color, 36);
+	clock = new UILabel(" ", Vec3(710.0f, 380.0f, 0.0f), color, 36);
 	AddLabel(clock);
 
 	//coins
-	AddElement(new UIElement("UI1_elements/coin.png", Vec3(-28.0f, 35.0f, 0.0f)));
-
 	coins = 0;
-	playerCoins = new UILabel(" ", Vec3(-25.0f, 35.5f, 0.0f), color, 36);
+	AddElement(new UIElement("UI1_elements/coin.png", Vec3(10.0f, 380.0f, 0.0f)));
+	playerCoins = new UILabel(" ", Vec3(36.0f, 382.0f, 0.0f), color, 36);
 	AddLabel(playerCoins);
 
 	//score
 	score = 0;
-	playerScore = new UILabel(" ", Vec3(-5.0f, 35.5f, 0.0f), color, 36);
+	playerScore = new UILabel(" ", Vec3(335.0f, 380.0f, 0.0f), color, 36);
 	AddLabel(playerScore);
+
+	victory = new UILabel(" ", Vec3(300.0f, 220.0f, 0.0f), color, 76);
+	AddLabel(victory);
+	
+	gameOver = new UILabel(" ", Vec3(300.0f, 230.0f, 0.0f), color, 76);
+	AddLabel(gameOver);
 
 	for (auto label : ui_labels) {
 		label->SetFont(fontName);
@@ -152,4 +157,14 @@ void UI01::SetCoins(int _coins)
 void UI01::SetScore(int _score)
 {
 	score = _score;
+}
+
+void UI01::Victory() {
+	victory->color = { 0, 255, 0 };
+	victory->text = "VICTORY!";
+}
+
+void UI01::GameOver() {
+	gameOver->color = { 255, 0, 0 };
+	gameOver->text = "YOU DIED!";
 }

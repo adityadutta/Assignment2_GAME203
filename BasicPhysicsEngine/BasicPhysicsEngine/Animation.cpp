@@ -6,15 +6,15 @@ Animation::Animation()
 {
 	frame = 0;
 
-	AnimationsImages.push_back("MarioBigRun1.png");
-	AnimationsImages.push_back("MarioBigIdle.png");
-	AnimationsImages.push_back("MarioBigJump.png");
+	AnimationsImages.push_back("Sprites/Mario/MarioBigRun1.png");
+	AnimationsImages.push_back("Sprites/Mario/MarioBigIdle.png");
+	AnimationsImages.push_back("Sprites/Mario/MarioBigJump.png");
 
 	
 	// flipedImages	
-	AnimationsImagesFliped.push_back("Fliped_MarioBigRun1.png");
-	AnimationsImagesFliped.push_back("Fliped_MarioBigIdle.png");
-	AnimationsImagesFliped.push_back("Fliped_MarioBigJump.png");
+	AnimationsImagesFliped.push_back("Sprites/Mario/MarioBigRun1F.png");
+	AnimationsImagesFliped.push_back("Sprites/Mario/MarioBigIdleF.png");
+	AnimationsImagesFliped.push_back("Sprites/Mario/MarioBigJumpF.png");
 
 }
 

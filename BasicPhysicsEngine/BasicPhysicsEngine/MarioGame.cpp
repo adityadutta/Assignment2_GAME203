@@ -30,8 +30,6 @@ bool MarioGame::OnCreate() {
 	}
 
 	cameraRect = { 0, 0, w, h };
-	cameraScrollSpeed = 20.0f;
-
 
 	HandleControls = std::unique_ptr<InputManager>(new InputManager());
 
@@ -50,36 +48,16 @@ bool MarioGame::OnCreate() {
 	}
 
 	float aspectRatio = (float)w / (float)h;
-	projectionMatrix = MMath::viewportNDC(w, h) * MMath::orthographic(-30.0f, 30.0f, -30.0f * aspectRatio, 30.0f * aspectRatio, 0.0f, 1.0f);
+	projectionMatrix = MMath::viewportNDC(w, h) * MMath::orthographic(0.0f, 780.0f, 0.0f, 400.0f, 0.0f, 1.0f);
 
 	IMG_Init(IMG_INIT_PNG);
 
 	//initializing the player
-	player = new Body("MarioBigIdle.png", 10.0f, Vec3(0.0f, -15.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO);
-	player->addCollider(10.0f, 24.0f);
-
-	//initializing the ground
-	ground = new Body("MarioLevel.png", 100.0f, Vec3(-20.0f, -30.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO);
-	ground->addCollider(100.0f, 6.0f);
-
-	AddToList(platforms, new Body("Sprites/Block.png", 1.0f, Vec3(-10.0f, -30.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
-	AddToList(platforms, new Body("Sprites/Block.png", 1.0f, Vec3(-15.0f, -30.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
-
-	AddToList(platforms, new Body("Sprites/Block.png", 1.0f, Vec3(-20.0f, -30.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
-	AddToList(platforms, new Body("Sprites/Block.png", 1.0f, Vec3(-25.0f, -30.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
-	AddToList(platforms, new Body("Sprites/Block.png", 1.0f, Vec3(-30.0f, -30.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
-	AddToList(platforms, new Body("Sprites/Block.png", 1.0f, Vec3(-40.0f, -30.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
-	AddToList(platforms, new Body("Sprites/Block.png", 1.0f, Vec3(20.0f, -20.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
+	player = new Body("Sprites/Mario/MarioBigIdle.png", 10.0f, Vec3(10.0f, 240.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO);
+	player->addCollider(3.0f, 6.0f);
 
 	// Read from a file
-	//MarioGame::Load();
-
-	AddToList(coins, new Body("Sprites/coin.png", 1.0f, Vec3(16.0f, -15.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
-	AddToList(coins, new Body("Sprites/coin.png", 1.0f, Vec3(10.0f, -24.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
-	AddToList(coins, new Body("Sprites/coin.png", 1.0f, Vec3(8.0f, -24.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
-	AddToList(coins, new Body("Sprites/coin.png", 1.0f, Vec3(12.0f, -24.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO));
-
-	AddToList(enemies, new Body("Sprites/GoombaWalk1.png", 1.0f, Vec3(15.0f, -15.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 0.0f, 0.0f)));
+	MarioGame::Load();
 
 	for (auto platform : platforms) {
 		if (platform == nullptr) {
@@ -104,7 +82,7 @@ bool MarioGame::OnCreate() {
 			return false;
 		}
 		else {
-			enemy->addCollider(16.0f, 2.0f);
+			enemy->addCollider(2.0f, 2.0f);
 			enemy->linearVelocity.Set(VECTOR3_LEFT);
 		}
 	}
@@ -123,18 +101,31 @@ void MarioGame::Load() {
 	json j;
 
 	//Opening and reading from a json file
-	std::ifstream i("savedata.json");
+	std::ifstream i("savedata2.json");
 	i >> j;
 
 	//Iterates through the json data
 	for (json::iterator it = j.begin(); it != j.end(); ++it) {
 		std::cout << j[it.key()] << std::endl;
-		if (j[it.key()]["type"] == "Collectible") {
-			AddToList(coins, new Body("Sprites/coin.png", 1.0f, Vec3(j[it.key()]["x"], j[it.key()]["y"], 0), VECTOR3_ZERO, VECTOR3_ZERO));
-			std::cout << "I'm here" << std::endl;
+		std::string imageName = j[it.key()]["image"];
+		if (j[it.key()]["type"] == "Coin") {
+			AddToList(coins, new Body(imageName, 1.0f, Vec3(j[it.key()]["x"], j[it.key()]["y"], 0), VECTOR3_ZERO, VECTOR3_ZERO));
 		}
-		else if (j[it.key()]["type"] == "Enemies") {
-			AddToList(enemies, new Body("Sprites/GoombaWalk1.png", 1.0f, Vec3(j[it.key()]["x"], j[it.key()]["y"], 0), VECTOR3_ZERO, VECTOR3_ZERO));
+		if (j[it.key()]["type"] == "Enemies") {
+			AddToList(enemies, new Body(imageName, 1.0f, Vec3(j[it.key()]["x"], j[it.key()]["y"], 0), VECTOR3_ZERO, VECTOR3_ZERO));
+		}
+		if (j[it.key()]["type"] == "Terrain") {
+			AddToList(platforms, new Body(imageName, 1.0f, Vec3(j[it.key()]["x"], j[it.key()]["y"], 0), VECTOR3_ZERO, VECTOR3_ZERO));
+		}
+		if (j[it.key()]["type"] == "UsedBlock") {
+			AddToList(platforms, new Body(imageName, 1.0f, Vec3(j[it.key()]["x"], j[it.key()]["y"], 0), VECTOR3_ZERO, VECTOR3_ZERO));
+		}
+		if (j[it.key()]["type"] == "Goal") {
+			victoryBox = std::unique_ptr<Body>(new Body(imageName, 1.0f, Vec3(j[it.key()]["x"], j[it.key()]["y"], 0), VECTOR3_ZERO, VECTOR3_ZERO));
+			victoryBox->addCollider(2.0f, 2.0f);
+		}
+		if (j[it.key()]["type"] == "Brick") {
+			AddToList(bricks, new Body(imageName, 1.0f, Vec3(j[it.key()]["x"], j[it.key()]["y"], 0), VECTOR3_ZERO, VECTOR3_ZERO));
 		}
 	}
 
@@ -150,9 +141,9 @@ void MarioGame::OnDestroy() {
 		delete player;
 		player = nullptr;
 	}
-	if (ground) {
-		delete ground;
-		ground = nullptr;
+
+	if (victoryBox) {
+		victoryBox = nullptr;
 	}
 
 	for (auto platform : platforms) {
@@ -180,80 +171,115 @@ void MarioGame::OnDestroy() {
 
 void MarioGame::Update(const float time) {
 
+	if (player == nullptr) {
+		return;
+	}
+
 	elapsedTime += time;
 	manager->update(elapsedTime);
 
-	if (Collider::checkCollision(player->collider, ground->collider)) {
-		player->isGrounded = true;
-		player->linearVelocity.y = 0.0f;
-	}
-	else {
-		player->isGrounded = false;
-	}
 
-	for (int i = 0; i < platforms.size(); i++) {
-		if (Collider::checkCollision(player->collider, platforms[i]->collider)) {
-			std::cout << "Collided Platform!";
-			player->isGrounded = true;
-			player->linearVelocity.y = 0.0f;
+	if (Collider::checkCollision(player->collider, victoryBox->collider)) {
+		std::cout << "You win";
+		manager->getCurrentUI()->Victory();
+		if (player) {
+			delete player;
+			player = nullptr;
+			return;
 		}
 	}
-	//	else {
-	//		player->isGrounded = false;
-	//	}
-	//}
 
-
-	if (!player->isGrounded) {
-		player->acceleration.y += -9.81f;
+	for (auto platform : platforms) {
+		if (!player->isGrounded) {
+			if (Vec3::Distance(player->position, platform->position) < 31.0f) {
+				if (Collider::checkCollision(player->collider, platform->collider)) {
+					std::cout << "Collided Platform!";
+					player->isGrounded = true;
+					player->linearVelocity.y = 0.0f;
+				}
+			}
+		}
 	}
 
 	//check collision of player with coins
 	for (int i = 0; i < coins.size(); i++) {
 		if (Collider::checkCollision(player->collider, coins[i]->collider)) {
 			std::cout << playerCoins << "\n";
-			//Collider::HandleCollision(*player, *coins[i], 1.0f);
 			auto it = std::find(coins.begin(), coins.end(), coins[i]);
 			if (it != coins.end()) {
 				coins.erase(it);
 				++playerCoins;
+				playerScore += 50;
 				manager->getCurrentUI()->SetCoins(playerCoins);
-			}
-		}
-	}
-
-
-	//check collision of player with enemies
-	for (int i = 0; i < enemies.size(); i++) {
-		if (Collider::checkCollision(player->collider, enemies[i]->collider)) {
-			auto it = std::find(enemies.begin(), enemies.end(), enemies[i]);
-			if (it != enemies.end()) {
-				enemies.erase(it);
-				std::cout << "Goomba died!";
-				playerScore += 100;
 				manager->getCurrentUI()->SetScore(playerScore);
 			}
 		}
 	}
 
+	//check collision of player with enemies
 	for (int i = 0; i < enemies.size(); i++) {
-		if (Collider::checkCollision(enemies[i]->collider, ground->collider)) {
-			enemies[i]->isGrounded = true;
-			enemies[i]->linearVelocity.y = 0.0f;
+		if (Collider::checkCollision(player->collider, enemies[i]->collider)) {
+			std::cout << "You died";
+			manager->getCurrentUI()->GameOver();
+			if (player) {
+				delete player;
+				player = nullptr;
+				return;
+			}
 		}
-		if (!enemies[i]->isGrounded) {
-			enemies[i]->acceleration.y += -10.0f;
-		}
-		if (enemies[i]) enemies[i]->update(time);
 	}
 
-	player->linearVelocity.x = MATH::clamp(player->linearVelocity.x, -10.0f, 10.0f);
+	//check collision of fireballs with enemies and walls
+	for (int i = 0; i < enemies.size(); i++) {
+		for (int j = 0; j < player->projectiles.size(); j++) {
+			if (enemies[i] != nullptr) {
+				if (Collider::checkCollision(enemies[i]->collider, player->projectiles[j]->collider)) {
+					auto it = std::find(enemies.begin(), enemies.end(), enemies[i]);
+					if (it != enemies.end()) {
+						enemies.erase(it);
+						std::cout << "Goomba died!";
+						playerScore += 100;
+						manager->getCurrentUI()->SetScore(playerScore);
+					}
 
-	//cameraRect.x = player->position.x * cameraScrollSpeed; // multiplying by camera scroll speed.
+					it = std::find(player->projectiles.begin(), player->projectiles.end(), player->projectiles[j]);
+					if (it != player->projectiles.end()) {
+						player->projectiles.erase(it);
+					}
+				}
+			}
+		}
+	}
+
+	for (int i = 0; i < platforms.size(); i++) {
+		for (int j = 0; j < player->projectiles.size(); j++) {
+			if (Collider::checkCollision(platforms[i]->collider, player->projectiles[j]->collider)) {
+				auto it = std::find(player->projectiles.begin(), player->projectiles.end(), player->projectiles[j]);
+				if (it != player->projectiles.end()) {
+					player->projectiles.erase(it);
+				}
+			}
+		}
+	}
+
+	for (int i = 0; i < enemies.size(); i++) {
+		for (int j = 0; j < platforms.size(); j++) {
+			if (Collider::checkCollision(enemies[i]->collider, platforms[j]->collider)) {
+				enemies[i]->isGrounded = true;
+				enemies[i]->linearVelocity.y = 0.0f;
+			}
+			if (!enemies[i]->isGrounded) {
+				enemies[i]->acceleration.y += -10.0f;
+			}
+			if (enemies[i]) enemies[i]->update(time);
+		}
+	}
+
+	player->linearVelocity.x = MATH::clamp(player->linearVelocity.x, -100.0f, 100.0f);
 
 	Vec3 Realplayer = projectionMatrix * player->position;
 
-	cameraRect.x = Realplayer.x - 320;
+	cameraRect.x = Realplayer.x - 390;
 	if (cameraRect.x < 0) {
 		cameraRect.x = 0;
 	}
@@ -261,8 +287,19 @@ void MarioGame::Update(const float time) {
 		cameraRect.y = cameraRect.h;
 	}
 
+	if (!player->isGrounded) {
+		player->acceleration.y += -30.0f;
+	}
+
 	//update player
-	if (player) player->update(time);
+	if (player) {
+		player->update(time);
+		if (player->projectiles.size() > 0) {
+			for (auto fb : player->projectiles) {
+				fb->update(time);
+			}
+		}
+	}
 }
 
 void MarioGame::Render() {
@@ -276,20 +313,33 @@ void MarioGame::Render() {
 	backgroundRectangle.y = 0.0f; /// implicit type conversions BAD - probably causes a compiler warning
 	SDL_BlitSurface(background, nullptr, screenSurface, &backgroundRectangle);
 
-	Vec3 playerCoords = projectionMatrix * player->position;
+	if (player != nullptr) {
+		Vec3 playerCoords = projectionMatrix * player->position;
 
-	playerRectangle.h = player->getImage()->h;
-	playerRectangle.w = player->getImage()->w;
-	playerRectangle.x = playerCoords.x - cameraRect.x; /// implicit type conversions BAD - probably causes a compiler warning
-	playerRectangle.y = playerCoords.y; /// implicit type conversions BAD - probably causes a compiler warning
-	SDL_BlitSurface(player->getImage(), nullptr, screenSurface, &playerRectangle);
+		playerRectangle.h = player->getImage()->h;
+		playerRectangle.w = player->getImage()->w;
+		playerRectangle.x = playerCoords.x - cameraRect.x; /// implicit type conversions BAD - probably causes a compiler warning
+		playerRectangle.y = playerCoords.y; /// implicit type conversions BAD - probably causes a compiler warning
+		SDL_BlitSurface(player->getImage(), nullptr, screenSurface, &playerRectangle);
 
-	Vec3  groundCoords = projectionMatrix * ground->position;
-	groundRect.h = ground->getImage()->h;
-	groundRect.w = ground->getImage()->w;
-	groundRect.x = groundCoords.x - cameraRect.x; /// implicit type conversions BAD - probably causes a compiler warning
-	groundRect.y = groundCoords.y; /// implicit type conversions BAD - probably causes a compiler warning
-	SDL_BlitSurface(ground->getImage(), nullptr, screenSurface, &groundRect);
+		for (auto fb : player->projectiles) {
+			Vec3 fbCoords = projectionMatrix * fb->position;
+
+			playerRectangle.h = fb->getImage()->h;
+			playerRectangle.w = fb->getImage()->w;
+			playerRectangle.x = fbCoords.x - cameraRect.x; /// implicit type conversions BAD - probably causes a compiler warning
+			playerRectangle.y = fbCoords.y; /// implicit type conversions BAD - probably causes a compiler warning
+			SDL_BlitSurface(fb->getImage(), nullptr, screenSurface, &playerRectangle);
+		}
+	}
+
+	Vec3 victoryCoords = projectionMatrix * victoryBox->position;
+
+	groundRect.h = victoryBox->getImage()->h;
+	groundRect.w = victoryBox->getImage()->w;
+	groundRect.x = victoryCoords.x - cameraRect.x; /// implicit type conversions BAD - probably causes a compiler warning
+	groundRect.y = victoryCoords.y; /// implicit type conversions BAD - probably causes a compiler warning
+	SDL_BlitSurface(victoryBox->getImage(), nullptr, screenSurface, &groundRect);
 
 	for (auto platform : platforms) {
 		Vec3 screenCoords = projectionMatrix * platform->position;
@@ -323,22 +373,14 @@ void MarioGame::Render() {
 
 	manager->render(projectionMatrix, screenSurface);
 
-	//Clear the screen.
-	SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-	SDL_RenderClear(renderer);
-
-	if (enemies.size() > 0)
-		drawColliders(enemies[0]->collider, VECTOR3_ZERO);
-
-	drawColliders(player->collider, VECTOR3_ZERO);
-	drawColliders(ground->collider, VECTOR3_ZERO);
-
-	//SDL_UpdateWindowSurface(window);
+	SDL_UpdateWindowSurface(window);
 
 }
 
 void MarioGame::HandleEvents(const SDL_Event &_event) {
-	HandleControls->HandleEvents(_event, player, player->isGrounded, anims);
+	if (player != nullptr) {
+		HandleControls->HandleEvents(_event, player, player->isGrounded, anims);
+	}
 	manager->handleEvents(_event);
 }
 

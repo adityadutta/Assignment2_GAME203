@@ -12,6 +12,7 @@ namespace A3Engine {
 		static bool CollisionCheck(const Body &body1, const Body &body2);
 		static bool CollisionCheck(const Body &body1, const Body &body2, float _radius);
 		static bool checkCollision(SDL_Rect a, SDL_Rect b);
+		static void HandleCollision(Body &body1, Body &body2);
 		static void HandleCollision(Body &body1, Body &body2, float _cor);
 		static void HandleMovingCollision(Body &body1, Body &body2, float _cor);
 

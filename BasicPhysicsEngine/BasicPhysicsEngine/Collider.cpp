@@ -55,7 +55,6 @@ bool Collider::checkCollision(SDL_Rect a, SDL_Rect b)
 		return false;
 	}
 
-
 	if (rightA <= leftB)
 	{
 		return false;
@@ -69,6 +68,43 @@ bool Collider::checkCollision(SDL_Rect a, SDL_Rect b)
 	//If none of the sides from A are outside B
 	return true;
 }
+
+void Collider::HandleCollision(Body &body1, Body &body2) {
+	if (checkCollision(body1.collider, body2.collider)) {
+		//The sides of the rectangles
+		int leftA, leftB;
+		int rightA, rightB;
+		int topA, topB;
+		int bottomA, bottomB;
+
+		//Calculate the sides of rect A
+		leftA = body1.collider.x;
+		rightA = body1.collider.x + body1.collider.w;
+		topA = body1.collider.y;
+		bottomA = body1.collider.y + body1.collider.h;
+
+		//Calculate the sides of rect B
+		leftB = body2.collider.x;
+		rightB = body2.collider.x + body2.collider.w;
+		topB = body2.collider.y;
+		bottomB = body2.collider.y + body2.collider.h;
+
+		//bool collidedFromLeft(Object otherObj)
+		if (rightA < leftB) {
+			body1.linearVelocity.x = -body1.linearVelocity.x;
+		}
+		else if (leftA >= rightB) {
+			body1.linearVelocity.x = -body1.linearVelocity.x;
+		}
+		else if (bottomA < topB) {
+			body1.linearVelocity.y = -body1.linearVelocity.x;
+		}
+		else if (topA >= bottomB) {
+			body1.linearVelocity.y = -body1.linearVelocity.x;
+		}
+	}
+}
+
 void Collider::HandleCollision(Body &body1, Body &body2, float _cor)
 {
 		Vec3 normal = (body2.position - body1.position).Normalize();

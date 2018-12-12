@@ -26,10 +26,12 @@ private:
 	SDL_Renderer* renderer;
 
 	Body* player;
-	Body* ground;
 	std::vector<Body*> platforms;
+	std::vector<Body*> bricks;
 	std::vector<Body*> coins;
 	std::vector<Body*> enemies;
+	std::unique_ptr<Body> victoryBox;
+
 
 	float elapsedTime;
 	bool isRunning;
@@ -43,8 +45,6 @@ private:
 	SDL_Rect enemyRect;
 
 	SDL_Rect cameraRect;
-	float cameraScrollSpeed;
-
 
 	std::shared_ptr<Animation> anims;
 	std::unique_ptr <InputManager> HandleControls;

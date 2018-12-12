@@ -14,6 +14,8 @@ private:
 	UILabel* clock;
 	UILabel* playerCoins;
 	UILabel* playerScore;
+	UILabel* victory;
+	UILabel* gameOver;
 
 public:
 	UI01();
@@ -27,6 +29,8 @@ public:
 
 	void SetCoins(int _coins);
 	void SetScore(int _score);
+	void Victory();
+	void GameOver();
 };
 
 #endif
