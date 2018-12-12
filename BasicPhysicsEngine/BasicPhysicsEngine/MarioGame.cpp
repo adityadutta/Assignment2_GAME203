@@ -86,43 +86,6 @@ bool MarioGame::OnCreate() {
 
 }
 
-void MarioGame::Load() {
-	//Creates a json variable
-	json j;
-
-	//Opening and reading from a json file
-	std::ifstream i("Levels/Level2.json");
-	i >> j;
-
-	//Iterates through the json data
-	for (json::iterator it = j.begin(); it != j.end(); ++it) {
-		std::cout << j[it.key()] << std::endl;
-		std::string imageName = j[it.key()]["image"];
-		if (j[it.key()]["type"] == "Coin") {
-			AddToList(coins, new Body(imageName, 1.0f, Vec3(j[it.key()]["x"], j[it.key()]["y"], 0), VECTOR3_ZERO, VECTOR3_ZERO));
-		}
-		if (j[it.key()]["type"] == "Enemies") {
-			AddToList(enemies, new Body(imageName, 1.0f, Vec3(j[it.key()]["x"], j[it.key()]["y"], 0), VECTOR3_ZERO, VECTOR3_ZERO));
-		}
-		if (j[it.key()]["type"] == "Terrain") {
-			AddToList(platforms, new Body(imageName, 1.0f, Vec3(j[it.key()]["x"], j[it.key()]["y"], 0), VECTOR3_ZERO, VECTOR3_ZERO));
-		}
-		if (j[it.key()]["type"] == "UsedBlock") {
-			AddToList(platforms, new Body(imageName, 1.0f, Vec3(j[it.key()]["x"], j[it.key()]["y"], 0), VECTOR3_ZERO, VECTOR3_ZERO));
-		}
-		if (j[it.key()]["type"] == "Goal") {
-			victoryBox = std::unique_ptr<Body>(new Body(imageName, 1.0f, Vec3(j[it.key()]["x"], j[it.key()]["y"], 0), VECTOR3_ZERO, VECTOR3_ZERO));
-			victoryBox->addCollider(2.0f, 2.0f);
-		}
-		if (j[it.key()]["type"] == "Brick") {
-			AddToList(bricks, new Body(imageName, 1.0f, Vec3(j[it.key()]["x"], j[it.key()]["y"], 0), VECTOR3_ZERO, VECTOR3_ZERO));
-		}
-	}
-
-	//Closes the file
-	i.close();
-}
-
 void MarioGame::OnDestroy() {
 
 	IMG_Quit();
@@ -182,8 +145,7 @@ void MarioGame::Update(const float time) {
 	for (auto platform : platforms) {
 		if (!player->isGrounded) {
 			if (Vec3::Distance(player->position, platform->position) < 31.0f) {
-				if (Collider::checkCollision(player->collider, platform->collider)) {
-					std::cout << "Collided Platform!";
+				if (Collider::checkCollision(player->collider, platform->collider)) {					
 					player->isGrounded = true;
 					player->linearVelocity.y = 0.0f;
 				}
@@ -376,6 +338,39 @@ void MarioGame::HandleEvents(const SDL_Event &_event) {
 	manager->handleEvents(_event);
 }
 
+void MarioGame::Load() {
+	//Creates a json variable
+	json j;
+
+	//Opening and reading from a json file
+	std::ifstream i("Levels/Level2.json");
+	i >> j;
+
+	//Iterates through the json data
+	for (json::iterator it = j.begin(); it != j.end(); ++it) {
+		std::cout << j[it.key()] << std::endl;
+		std::string imageName = j[it.key()]["image"];
+		if (j[it.key()]["type"] == "Coin") {
+			AddToList(coins, new Body(imageName, 1.0f, Vec3(j[it.key()]["x"], j[it.key()]["y"], 0), VECTOR3_ZERO, VECTOR3_ZERO));
+		}
+		if (j[it.key()]["type"] == "Enemies") {
+			AddToList(enemies, new Body(imageName, 1.0f, Vec3(j[it.key()]["x"], j[it.key()]["y"], 0), VECTOR3_ZERO, VECTOR3_ZERO));
+		}
+		if (j[it.key()]["type"] == "Terrain") {
+			AddToList(platforms, new Body(imageName, 1.0f, Vec3(j[it.key()]["x"], j[it.key()]["y"], 0), VECTOR3_ZERO, VECTOR3_ZERO));
+		}
+		if (j[it.key()]["type"] == "UsedBlock") {
+			AddToList(platforms, new Body(imageName, 1.0f, Vec3(j[it.key()]["x"], j[it.key()]["y"], 0), VECTOR3_ZERO, VECTOR3_ZERO));
+		}
+		if (j[it.key()]["type"] == "Goal") {
+			victoryBox = std::unique_ptr<Body>(new Body(imageName, 1.0f, Vec3(j[it.key()]["x"], j[it.key()]["y"], 0), VECTOR3_ZERO, VECTOR3_ZERO));
+			victoryBox->addCollider(2.0f, 2.0f);
+		}
+	}
+
+	//Closes the file
+	i.close();
+}
 
 void MarioGame::AddToList(std::vector<Body*> &list, Body * body)
 {

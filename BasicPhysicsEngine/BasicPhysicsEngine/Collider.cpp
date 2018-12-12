@@ -92,20 +92,20 @@ void Collider::HandleCollision(Body &body1, Body &body2) {
 		bottomB = body2.collider.y + body2.collider.h;
 
 		//bool collidedFromLeft(Object otherObj)
-		if (rightA <= leftB) {
+		if (rightA > leftB) {
 			std::cout << "Collided Platform!";
 			body1.linearVelocity.x = -body1.linearVelocity.x;
 		}
-		else if (leftA >= rightB) {
+		if (leftA <= rightB) {
 			std::cout << "Collided Platform!";
 			body1.linearVelocity.x = -body1.linearVelocity.x;
 		}
-		else if (bottomA <= topB) {
+		if (bottomA >= topB) {
 			std::cout << "Collided Platform!";
 			body1.linearVelocity.y = 0.0f;
 			//body1.linearVelocity.y = -body1.linearVelocity.y;
 		}
-		else if (topA >= bottomB) {
+		if (topA <= bottomB) {
 			std::cout << "Collided Platform!";
 			body1.linearVelocity.y = 0.0f;
 			//body1.linearVelocity.y = -body1.linearVelocity.y;

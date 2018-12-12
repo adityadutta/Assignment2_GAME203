@@ -14,7 +14,6 @@ private:
 
 	Body* player;
 	std::vector<Body*> platforms;
-	std::vector<Body*> bricks;
 	std::vector<Body*> coins;
 	std::vector<Body*> enemies;
 	std::unique_ptr<Body> victoryBox;
@@ -44,10 +43,10 @@ private:
 	void AddToList(std::vector<Body*> &list, Body* body);
 	void drawColliders(SDL_Rect _rect, Vec3 _color);
 
+	void Load();
 public:
 	MarioGame(SDL_Window* sdlWindow);
 	bool OnCreate();
-	void Load();
 	void OnDestroy();
 	void Update(const float time);
 	void Render();

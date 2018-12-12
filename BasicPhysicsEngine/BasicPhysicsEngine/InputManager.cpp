@@ -35,9 +35,12 @@ void InputManager::HandleEvents(const SDL_Event &_event, Body* player, bool isGr
 			CheckFliped = false;
 		}
 	}
-	else if (state[SDL_SCANCODE_SPACE]) {
+	else {
+		player->linearVelocity.x = 0.0f;
+	}
+	if (state[SDL_SCANCODE_SPACE]) {
 		if (isGround_) {
-			player->ApplyForceToCentre(VECTOR3_UP * 20000.0f);
+			player->ApplyForceToCentre(VECTOR3_UP * 15000.0f);
 			if (CheckFliped == true) {
 				anims->setAnim(*player, States::JUMPING);
 			}
@@ -47,15 +50,12 @@ void InputManager::HandleEvents(const SDL_Event &_event, Body* player, bool isGr
 			player->isGrounded = false;
 		}
 	}
-	else if (state[SDL_SCANCODE_LCTRL]) {
+	if (state[SDL_SCANCODE_LCTRL]) {
 
 		if (shootTimer <= 0) {
 			player->Shoot(CheckFliped);
 			shootTimer = 0.5;
 		}
-	}
-	else {
-		player->linearVelocity.x = 0.0f;
 	}
 }
 

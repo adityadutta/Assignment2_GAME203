@@ -35,7 +35,7 @@ bool UI01::onCreate() {
 	victory = new UILabel(" ", Vec3(300.0f, 220.0f, 0.0f), color, 76);
 	AddLabel(victory);
 	
-	gameOver = new UILabel(" ", Vec3(300.0f, 230.0f, 0.0f), color, 76);
+	gameOver = new UILabel(" ", Vec3(200.0f, 250.0f, 0.0f), color, 76);
 	AddLabel(gameOver);
 
 	for (auto label : ui_labels) {
@@ -166,5 +166,5 @@ void UI01::Victory() {
 
 void UI01::GameOver() {
 	gameOver->color = { 255, 0, 0 };
-	gameOver->text = "YOU DIED!";
+	gameOver->text = "YOU DIED! LOSER.";
 }
