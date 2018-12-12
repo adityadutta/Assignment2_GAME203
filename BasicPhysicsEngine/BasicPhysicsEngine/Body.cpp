@@ -133,6 +133,12 @@ float Body::getRotationalInertia() {
 	return rotationalInertia;
 }
 
-void Body::Shoot() {
-	projectiles.push_back(new Body("Sprites/Mario/Fireball.png", 1.0f, position + Vec3(0.0f, 4.0f, 0.0f), Vec3(VECTOR3_RIGHT * 300.0f), VECTOR3_ZERO));
+void Body::Shoot(bool checkFliped_) {
+	if (checkFliped_ == true) {
+		projectiles.push_back(new Body("Sprites/Mario/Fireball.png", 1.0f, position + Vec3(0.0f, 4.0f, 0.0f), Vec3(VECTOR3_RIGHT * 300.0f), VECTOR3_ZERO));
+	}
+	else {
+		projectiles.push_back(new Body("Sprites/Mario/Fireball.png", 1.0f, position + Vec3(0.0f, 4.0f, 0.0f), Vec3(VECTOR3_LEFT * 300.0f), VECTOR3_ZERO));
+	}
+	
 }

@@ -11,6 +11,7 @@ void InputManager::HandleEvents(const SDL_Event &_event, Body* player, bool isGr
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 
 	if (state[SDL_SCANCODE_RIGHT] || state[SDL_SCANCODE_D]) {
+
 		player->linearVelocity += (VECTOR3_RIGHT * 100.0f);
 		if (isGround_) {
 			anims->setAnim(*player, States::WALKING);
@@ -18,16 +19,20 @@ void InputManager::HandleEvents(const SDL_Event &_event, Body* player, bool isGr
 		}
 		if (!isGround_) {
 			anims->setAnim(*player, States::JUMPING);
+			CheckFliped = true;
 		}
 	}
 	else if (state[SDL_SCANCODE_LEFT] || state[SDL_SCANCODE_A]) {
+
 		player->linearVelocity += (VECTOR3_LEFT * 100.0f);
+
 		if (isGround_) {
 			anims->setAnimFliped(*player, States::WALKING);
 			CheckFliped = false;
 		}
 		if (!isGround_) {
 			anims->setAnimFliped(*player, States::JUMPING);
+			CheckFliped = false;
 		}
 	}
 	else if (state[SDL_SCANCODE_SPACE]) {
@@ -43,9 +48,17 @@ void InputManager::HandleEvents(const SDL_Event &_event, Body* player, bool isGr
 		}
 	}
 	else if (state[SDL_SCANCODE_LCTRL]) {
-		player->Shoot();
+
+		if (shootTimer <= 0) {
+			player->Shoot(CheckFliped);
+			shootTimer = 0.5;
+		}
 	}
 	else {
 		player->linearVelocity.x = 0.0f;
 	}
+}
+
+void InputManager::SetTimer(float time_) {
+	shootTimer -= time_;
 }

@@ -1,7 +1,40 @@
 ﻿cl : Command line warning D9002: ignoring unknown option '/std:[c++17|c++latest]'
-  UI01.cpp
-c:\users\adity\desktop\humber\_humber fall 2018\game programming 5 - game-203-0na\assignment2_game203\basicphysicsengine\basicphysicsengine\ui01.cpp(114): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-c:\users\adity\desktop\humber\_humber fall 2018\game programming 5 - game-203-0na\assignment2_game203\basicphysicsengine\basicphysicsengine\ui01.cpp(115): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-c:\users\adity\desktop\humber\_humber fall 2018\game programming 5 - game-203-0na\assignment2_game203\basicphysicsengine\basicphysicsengine\ui01.cpp(129): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-c:\users\adity\desktop\humber\_humber fall 2018\game programming 5 - game-203-0na\assignment2_game203\basicphysicsengine\basicphysicsengine\ui01.cpp(130): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-  BasicPhysicsEngine.vcxproj -> C:\Users\adity\Desktop\HUMBER\_Humber Fall 2018\Game Programming 5 - GAME-203-0NA\Assignment2_GAME203\BasicPhysicsEngine\Debug\BasicPhysicsEngine.exe
+  MarioGame.cpp
+d:\humber\semester 3\game 203_ game programing 5\assignment2_game203\basicphysicsengine\basicphysicsengine\collider.h(40): warning C4018: '<': signed/unsigned mismatch
+d:\humber\semester 3\game 203_ game programing 5\assignment2_game203\basicphysicsengine\basicphysicsengine\collider.h(44): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+d:\humber\semester 3\game 203_ game programing 5\assignment2_game203\basicphysicsengine\basicphysicsengine\collider.h(64): warning C4018: '<': signed/unsigned mismatch
+d:\humber\semester 3\game 203_ game programing 5\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(206): warning C4018: '<': signed/unsigned mismatch
+d:\humber\semester 3\game 203_ game programing 5\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(221): warning C4018: '<': signed/unsigned mismatch
+d:\humber\semester 3\game 203_ game programing 5\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(234): warning C4018: '<': signed/unsigned mismatch
+d:\humber\semester 3\game 203_ game programing 5\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(235): warning C4018: '<': signed/unsigned mismatch
+d:\humber\semester 3\game 203_ game programing 5\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(255): warning C4018: '<': signed/unsigned mismatch
+d:\humber\semester 3\game 203_ game programing 5\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(256): warning C4018: '<': signed/unsigned mismatch
+d:\humber\semester 3\game 203_ game programing 5\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(266): warning C4018: '<': signed/unsigned mismatch
+d:\humber\semester 3\game 203_ game programing 5\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(267): warning C4018: '<': signed/unsigned mismatch
+d:\humber\semester 3\game 203_ game programing 5\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(283): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\humber\semester 3\game 203_ game programing 5\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(313): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\humber\semester 3\game 203_ game programing 5\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(314): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\humber\semester 3\game 203_ game programing 5\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(322): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\humber\semester 3\game 203_ game programing 5\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(323): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\humber\semester 3\game 203_ game programing 5\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(331): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\humber\semester 3\game 203_ game programing 5\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(332): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\humber\semester 3\game 203_ game programing 5\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(341): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\humber\semester 3\game 203_ game programing 5\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(342): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\humber\semester 3\game 203_ game programing 5\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(350): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\humber\semester 3\game 203_ game programing 5\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(351): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\humber\semester 3\game 203_ game programing 5\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(360): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\humber\semester 3\game 203_ game programing 5\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(361): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\humber\semester 3\game 203_ game programing 5\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(370): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\humber\semester 3\game 203_ game programing 5\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(371): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\humber\semester 3\game 203_ game programing 5\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(399): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\humber\semester 3\game 203_ game programing 5\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(402): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\humber\semester 3\game 203_ game programing 5\assignment2_game203\basicphysicsengine\basicphysicsengine\mariogame.cpp(403): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+  InputManager.cpp
+  Generating Code...
+  Skipping... (no relevant changes detected)
+  GameManager.cpp
+  Collider.cpp
+  Body.cpp
+  Animation.cpp
+  BasicPhysicsEngine.vcxproj -> D:\Humber\Semester 3\Game 203_ Game Programing 5\Assignment2_GAME203\BasicPhysicsEngine\Debug\BasicPhysicsEngine.exe
+  BasicPhysicsEngine.vcxproj -> D:\Humber\Semester 3\Game 203_ Game Programing 5\Assignment2_GAME203\BasicPhysicsEngine\Debug\BasicPhysicsEngine.pdb (Partial PDB)

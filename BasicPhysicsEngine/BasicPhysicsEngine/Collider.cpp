@@ -70,7 +70,9 @@ bool Collider::checkCollision(SDL_Rect a, SDL_Rect b)
 }
 
 void Collider::HandleCollision(Body &body1, Body &body2) {
+
 	if (checkCollision(body1.collider, body2.collider)) {
+		//std::cout << "Collided Platform!";
 		//The sides of the rectangles
 		int leftA, leftB;
 		int rightA, rightB;
@@ -90,19 +92,26 @@ void Collider::HandleCollision(Body &body1, Body &body2) {
 		bottomB = body2.collider.y + body2.collider.h;
 
 		//bool collidedFromLeft(Object otherObj)
-		if (rightA < leftB) {
+		if (rightA <= leftB) {
+			std::cout << "Collided Platform!";
 			body1.linearVelocity.x = -body1.linearVelocity.x;
 		}
 		else if (leftA >= rightB) {
+			std::cout << "Collided Platform!";
 			body1.linearVelocity.x = -body1.linearVelocity.x;
 		}
-		else if (bottomA < topB) {
-			body1.linearVelocity.y = -body1.linearVelocity.x;
+		else if (bottomA <= topB) {
+			std::cout << "Collided Platform!";
+			body1.linearVelocity.y = 0.0f;
+			//body1.linearVelocity.y = -body1.linearVelocity.y;
 		}
 		else if (topA >= bottomB) {
-			body1.linearVelocity.y = -body1.linearVelocity.x;
+			std::cout << "Collided Platform!";
+			body1.linearVelocity.y = 0.0f;
+			//body1.linearVelocity.y = -body1.linearVelocity.y;
 		}
 	}
+
 }
 
 void Collider::HandleCollision(Body &body1, Body &body2, float _cor)
@@ -113,6 +122,7 @@ void Collider::HandleCollision(Body &body1, Body &body2, float _cor)
 
 		body1.linearVelocity += 2 * projection * _cor;
 }
+
 void Collider::HandleMovingCollision(Body &body1, Body &body2, float _cor)
 {
 	Vec3 normal = (body2.position - body1.position).Normalize();

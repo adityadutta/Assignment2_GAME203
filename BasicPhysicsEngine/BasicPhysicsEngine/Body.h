@@ -21,8 +21,6 @@ private:
 	float rotationalInertia;					//variable to hold rotational inertia
 	SDL_Surface *bodyImage;
 
-	//Moves the collision boxes relative to the dot's offset
-	void shiftColliders();
 public:
 	Vec3 position;								//variable to hold the value of position
 	Vec3 linearVelocity;							//variable to hold the value of velocity
@@ -56,7 +54,7 @@ public:
 
 
 	std::vector<Body*> projectiles;	
-	void Shoot();
+	void Shoot(bool checkFliped_);
 
 };
 #endif //!BODY_H

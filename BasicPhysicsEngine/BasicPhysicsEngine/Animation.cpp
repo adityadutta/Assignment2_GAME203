@@ -10,7 +10,6 @@ Animation::Animation()
 	AnimationsImages.push_back("Sprites/Mario/MarioBigIdle.png");
 	AnimationsImages.push_back("Sprites/Mario/MarioBigJump.png");
 
-	
 	// flipedImages	
 	AnimationsImagesFliped.push_back("Sprites/Mario/MarioBigRun1F.png");
 	AnimationsImagesFliped.push_back("Sprites/Mario/MarioBigIdleF.png");
@@ -30,7 +29,6 @@ void Animation::setAnim(Body& body, States bo) {
 	if (bo == States::JUMPING) {
 		body.SetImage(AnimationsImages[2]);
 	}
-
 }
 
 void Animation::setAnimFliped(Body& body, States bo) {

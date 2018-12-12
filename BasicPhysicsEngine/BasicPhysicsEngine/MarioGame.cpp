@@ -53,9 +53,7 @@ bool MarioGame::OnCreate() {
 	IMG_Init(IMG_INIT_PNG);
 
 	//initializing the player
-	player = new Body("Sprites/Mario/MarioBigIdle.png", 10.0f, Vec3(10.0f, 240.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO);
-	player->addCollider(3.0f, 6.0f);
-
+	player = new Body("Sprites/Mario/MarioBigIdle.png", 10.0f, Vec3(10.0f, 150.0f, 0.0f), VECTOR3_ZERO, VECTOR3_ZERO);\
 	// Read from a file
 	MarioGame::Load();
 
@@ -63,18 +61,13 @@ bool MarioGame::OnCreate() {
 		if (platform == nullptr) {
 			return false;
 		}
-		else {
-			platform->addCollider(1.0f, 1.0f);
-		}
 	}
 
 	for (auto coin : coins) {
 		if (coin == nullptr) {
 			return false;
 		}
-		else {
-			coin->addCollider(0.16f, 0.16f);
-		}
+
 	}
 
 	for (auto enemy : enemies) {
@@ -82,7 +75,6 @@ bool MarioGame::OnCreate() {
 			return false;
 		}
 		else {
-			enemy->addCollider(2.0f, 2.0f);
 			enemy->linearVelocity.Set(VECTOR3_LEFT);
 		}
 	}
@@ -177,7 +169,7 @@ void MarioGame::Update(const float time) {
 
 	elapsedTime += time;
 	manager->update(elapsedTime);
-
+	HandleControls->SetTimer(time);
 
 	if (Collider::checkCollision(player->collider, victoryBox->collider)) {
 		std::cout << "You win";
@@ -198,9 +190,9 @@ void MarioGame::Update(const float time) {
 					player->linearVelocity.y = 0.0f;
 				}
 			}
-		}
-	}
 
+		}	
+	}
 	//check collision of player with coins
 	for (int i = 0; i < coins.size(); i++) {
 		if (Collider::checkCollision(player->collider, coins[i]->collider)) {
@@ -370,6 +362,8 @@ void MarioGame::Render() {
 		enemyRect.y = screenCoords.y; /// implicit type conversions BAD - probably causes a compiler warning
 		SDL_BlitSurface(enemy->getImage(), nullptr, screenSurface, &enemyRect);
 	}
+
+
 
 	manager->render(projectionMatrix, screenSurface);
 

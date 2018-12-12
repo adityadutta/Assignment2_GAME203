@@ -4,6 +4,7 @@
 
 #include"Vector.h"
 #include"Body.h"
+#include<iostream>
 
 namespace A3Engine {
 	class Collider

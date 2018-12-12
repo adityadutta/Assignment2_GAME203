@@ -16,6 +16,9 @@ public:
 
 	void HandleEvents(const SDL_Event &_event, Body*player, bool isGround_, std::shared_ptr<Animation> anims);
 	bool CheckFliped;
+	float shootTimer;
+	void SetTimer(float time_);
+
 };
 
 #endif
