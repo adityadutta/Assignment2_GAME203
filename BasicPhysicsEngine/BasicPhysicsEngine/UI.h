@@ -22,7 +22,8 @@ public:
 	virtual void handleEvents(const SDL_Event &_event) = 0;													//handles key and mouse inputs in the UI
 
 	virtual void AddElement(UIElement* element) = 0;														//helper method to add UI elements to vecor list
-	virtual void AddLabel(UILabel* label) = 0;																//helper method to add UI labels to vector list
+	virtual void AddLabel(UILabel* label) = 0;			
+	//virtual void handleAction(int a) = 0;//helper method to add UI labels to vector list
 };
 
 #endif

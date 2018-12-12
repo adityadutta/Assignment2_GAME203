@@ -239,6 +239,15 @@ void MarioGame::Update(const float time) {
 		cameraRect.y = cameraRect.h;
 	}
 
+	if (player->position.y < platforms[0]->position.y - 20.0f) {
+		manager->getCurrentUI()->GameOver();
+		if (player) {
+			delete player;
+			player = nullptr;
+			return;
+		}
+	}
+
 	if (!player->isGrounded) {
 		player->acceleration.y += -30.0f;
 	}
@@ -343,12 +352,11 @@ void MarioGame::Load() {
 	json j;
 
 	//Opening and reading from a json file
-	std::ifstream i("Levels/Level2.json");
+	std::ifstream i("Levels/Level3.json");
 	i >> j;
 
 	//Iterates through the json data
 	for (json::iterator it = j.begin(); it != j.end(); ++it) {
-		std::cout << j[it.key()] << std::endl;
 		std::string imageName = j[it.key()]["image"];
 		if (j[it.key()]["type"] == "Coin") {
 			AddToList(coins, new Body(imageName, 1.0f, Vec3(j[it.key()]["x"], j[it.key()]["y"], 0), VECTOR3_ZERO, VECTOR3_ZERO));
