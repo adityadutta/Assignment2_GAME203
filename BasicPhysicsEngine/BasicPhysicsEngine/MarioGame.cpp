@@ -5,9 +5,7 @@
 
 #include "MarioGame.h"
 #include"Body.h"
-#include"MMath.h"
 #include"Collider.h"
-#include"UIManager.h"
 
 using namespace A3Engine;
 
@@ -22,7 +20,7 @@ bool MarioGame::OnCreate() {
 
 	int w, h;
 	SDL_GetWindowSize(window, &w, &h);
-	background = IMG_Load("background.png");
+	background = IMG_Load("Sprites/background.png");
 	renderer = SDL_CreateRenderer(window, -1, 0);
 
 	if (background == nullptr) {
@@ -93,7 +91,7 @@ void MarioGame::Load() {
 	json j;
 
 	//Opening and reading from a json file
-	std::ifstream i("savedata2.json");
+	std::ifstream i("Levels/Level2.json");
 	i >> j;
 
 	//Iterates through the json data

@@ -1,18 +1,9 @@
 #ifndef MARIOGAME_H
 #define MARIOGAME_H
 
-#include "Matrix.h"
-#include"Vector.h"
 #include "Scene.h"
-#include<vector>
-#include "Animation.h"
-#include <SDL.h>
-#include<SDL_image.h>
-#include <memory>
-#include "InputManager.h"
-#include "json.hpp"
 #include <fstream>
-#include <iostream>
+#include "json.hpp"
 
 using json = nlohmann::json;
 
@@ -20,10 +11,6 @@ class Body;
 using namespace MATH;
 class MarioGame : public Scene {
 private:
-	SDL_Window *window;
-	Matrix4 projectionMatrix;
-
-	SDL_Renderer* renderer;
 
 	Body* player;
 	std::vector<Body*> platforms;
